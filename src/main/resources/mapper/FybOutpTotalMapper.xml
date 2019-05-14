@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://www.mybatis.apache.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ewell.upload.dao.FybOutTotalDao">
+    <resultMap id="fybOutTotal" type="FybOutTotal">
+        <id column="OUTP_PRE_CHECK_NO" property="outpCheckNo" ></id>
+        <result column="PATIENT_ID" property="patientId"></result>
+        <result column="REG_TIME" property="regTime"></result>
+        <result column="STATUS" property="status"></result>
+    </resultMap>
+    <resultMap id="fybOutInfo" type="FybOutInfo" extends="fybOutTotal">
+        <result column="HEALTHCARE_NO" property="healthcareNo"></result>
+        <result column="SYS_ID" property="sysId"></result>
+    </resultMap>
+    <resultMap id="fybWomanMain" type="FybWomanMain">
+        <id column="PATIENT_ID" property="patientNo"></id>
+        <result column="OUTP_PRE_CHECK_NO" property="outpatientNo"></result>
+        <result column="SYSID" property="sysId"></result>
+        <result column="SRC" property="src"></result>
+        <result column="UPLOADTIME" property="uploadTime"></result>
+        <result column="ORGANCODE" property="organCode"></result>
+        <result column="ORGAN" property="organ"></result>
+        <result column="RECORDORGANCODE" property="recordOrganCode"></result>
+        <result column="RECORDORGAN" property="recordOrgan"></result>
+        <result column="DOCTORCODE" property="doctorCode"></result>
+        <result column="DOCTOR" property="doctor"></result>
+        <result column="CHECKDATE" property="checkDate" javaType="java.lang.String" jdbcType="DATE" typeHandler="com.ewell.upload.util.DBDateTypeHandler"></result>
+        <result column="INPUTORGANCODE" property="inputOrganCode"></result>
+        <result column="INPUTORGAN" property="inputOrgan"></result>
+        <result column="INPUTDOCTORCODE" property="inputDoctorCode"></result>
+        <result column="INPUTDOCTOR" property="inputDoctor"></result>
+        <result column="INPUTDATE" property="inputDate"></result>
+        <result column="NAME" property="name"></result>
+        <result column="IDCARD" property="idcard"></result>
+        <result column="BIRTHDAY" property="birthday"></result>
+        <result column="CARDTYPE" property="cardType"></result>
+        <result column="CARDNO" property="cardNo"></result>
+        <result column="AGE" property="age"></result>
+        <result column="NATIONALITY" property="nationality"></result>
+        <result column="NATION" property="nation"></result>
+        <result column="TEL" property="tel"></result>
+        <result column="DOMICILETYPE" property="domicileType"></result>
+        <result column="DOMICILEMODE" property="domicileMode"></result>
+        <result column="ADDRCODE" property="addrCode"></result>
+        <result column="PROV" property="prov"></result>
+        <result column="CITY" property="city"></result>
+        <result column="COUNTY" property="county"></result>
+        <result column="TOWN" property="town"></result>
+        <result column="MANNOT" property="manNot"></result>
+        <result column="MANNAME" property="manName"></result>
+        <result column="MANCARDTYPE" property="manCardType"></result>
+        <result column="MANCARDNO" property="manCardNo"></result>
+        <result column="MANBIRTHDAY" property="manBirthday"></result>
+        <result column="MANAGE" property="manAge"></result>
+        <result column="MANNATIONALITY" property="manNationality"></result>
+        <result column="MANNATION" property="manNation"></result>
+        <result column="MANTEL" property="manTel"></result>
+        <result column="MANEDUCATION" property="manEducation"></result>
+        <result column="MANOCCUPATION" property="manOccupation"></result>
+        <result column="CHECKPERIOD" property="checkPeriod"></result>
+        <result column="LMP" property="lmp"></result>
+        <result column="EXPECTEDDATE" property="expectedDate"></result>
+    </resultMap>
+    <!-- 更新异常信息-->
+    <update id="updateErrorMessage">
+        UPDATE IHD.FYB_OUTP_TODAT T SET T.EXCEPTION = #{exception}
+        WHERE T.OUTP_PRE_CHECK_NO = #{outpCheckNo} AND T.PATIENT_ID = #{patientId}
+    </update>
+    <insert id="insertOutpInfo">
+        INSERT INTO IHD.FYB_OUTP_INFO(OUTP_PRE_CHECK_NO,
+        PATIENT_ID,
+        REG_TIME,
+        STATUS,
+        HEALTHCARE_NO,
+        SYS_ID) VALUES(#{outpCheckNo},#{patientId},TO_DATE(#{regTime},'yyyy-mm-dd hh24:mi:ss'),#{status},#{healthcareNo},#{sysId})
+    </insert>
+    <!-- 查询时间范围内的通道消息 -->
+    <select id="select" resultMap="fybOutTotal">
+        SELECT OUTP_PRE_CHECK_NO,
+        PATIENT_ID,
+        REG_TIME,
+        STATUS FROM IHD.FYB_OUTP_TODAT WHERE STATUS = '0'
+        UNION
+        SELECT OUTP_PRE_CHECK_NO,
+        PATIENT_ID,
+        REG_TIME,
+        STATUS FROM IHD.FYB_OUTP_TODAT WHERE STATUS = '1'
+    </select>
+    <select id="selectHealthNoByOutpNo" resultMap="fybOutInfo">
+        SELECT T.HEALTHCARE_NO,T.SYS_ID FROM IHD.FYB_OUTP_INFO T WHERE T.OUTP_PRE_CHECK_NO = #{_parameter}
+    </select>
+    <select id="selectWomanMain" resultMap="fybWomanMain">
+        SELECT PATIENT_ID,
+        OUTP_PRE_CHECK_NO,
+        SYSID,
+        SRC,
+        UPLOADTIME,
+        ORGANCODE,
+        ORGAN,
+        RECORDORGANCODE,
+        RECORDORGAN,
+        DOCTORCODE,
+        DOCTOR,
+        CHECKDATE,
+        INPUTORGANCODE,
+        INPUTORGAN,
+        INPUTDOCTORCODE,
+        INPUTDOCTOR,
+        INPUTDATE,
+        NAME,
+        IDCARD,
+        BIRTHDAY,
+        CARDTYPE,
+        CARDNO,
+        AGE,
+        NATIONALITY,
+        NATION,
+        TEL,
+        DOMICILETYPE,
+        DOMICILEMODE,
+        ADDRCODE,
+        PROV,
+        CITY,
+        COUNTY,
+        TOWN,
+        MANNOT,
+        MANNAME,
+        MANCARDTYPE,
+        MANCARDNO,
+        MANBIRTHDAY,
+        MANAGE,
+        MANNATIONALITY,
+        MANNATION,
+        MANTEL,
+        MANEDUCATION,
+        MANOCCUPATION,
+        CHECKPERIOD,
+        LMP,
+        EXPECTEDDATE FROM IHD.FYB_WOMAN_MAIN T WHERE T.PATIENT_ID = #{patientId} AND T.OUTP_PRE_CHECK_NO = #{outpCheckNo} AND ROWNUM = 1
+    </select>
+</mapper>
