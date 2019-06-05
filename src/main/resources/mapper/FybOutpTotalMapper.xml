@@ -6,6 +6,7 @@
         <id column="OUTP_PRE_CHECK_NO" property="outpCheckNo" ></id>
         <result column="PATIENT_ID" property="patientId"></result>
         <result column="REG_TIME" property="regTime"></result>
+        <result column="ID_NO" property="idNo"></result>
         <result column="STATUS" property="status"></result>
     </resultMap>
     <resultMap id="fybOutInfo" type="FybOutInfo" extends="fybOutTotal">
@@ -60,10 +61,92 @@
         <result column="CHECKPERIOD" property="checkPeriod"></result>
         <result column="LMP" property="lmp"></result>
         <result column="EXPECTEDDATE" property="expectedDate"></result>
+        <result column="GRAVIDITY" property="gravidity"></result>
+    </resultMap>
+    <resultMap id="fybWomanCheck" type="FybWomanCheck">
+        <result column="NAME" property="Name"></result>
+        <result column="BIRTHDAY" property="birthday"></result>
+        <result column="SYS_ID" property="sysId" ></result>
+        <result column="DB_KEY" property="dbKey" ></result>
+        <result column="TB_KEY" property="tbKey" ></result>
+        <result column="SRC" property="src" ></result>
+        <result column="EXT" property="ext" ></result>
+        <result column="UPLOADTIME" property="uploadTime" javaType="java.lang.String" jdbcType="DATE" typeHandler="com.ewell.upload.util.DBDateTypeHandler"></result>
+        <result column="DOCTORID" property="doctorCode" ></result>
+        <result column="DOCTOR" property="doctor" ></result>
+        <result column="CHECKDATE" property="checkDate" javaType="java.lang.String" jdbcType="DATE" typeHandler="com.ewell.upload.util.DBDateTypeHandler"></result>
+        <result column="PAITENT_ID" property="patientNo" ></result>
+        <result column="OUTP_PRE_CHECK_NO" property="outpatientNo" ></result>
+        <result column="CHECKSQL" property="checkSeq" ></result>
+        <result column="FIRSTCHECK" property="firstCheck" ></result>
+        <result column="LMP" property="lmp" ></result>
+        <result column="EXPECTEDDATE" property="expectedDate" ></result>
+        <result column="GESTWEEKS" property="gestWeeks" ></result>
+        <result column="GESTDAYS" property="gestDays" ></result>
+        <result column="SUREWEEKS" property="sureWeeks" ></result>
+        <result column="SUREDAYS" property="sureDays" ></result>
+        <result column="SUREIMP" property="sureLmp" ></result>
+        <result column="EXPECTEDDATE" property="sureExpectedDate" ></result>
+        <result column="HEIGHT" property="height" ></result>
+        <result column="WEIGHT" property="weight" ></result>
+        <result column="SBP" property="sbp" ></result>
+        <result column="DBP" property="dbp" ></result>
+        <result column="FU" property="fu" ></result>
+        <result column="AC" property="ac" ></result>
+        <result column="MAINSUIT" property="mainSuit" ></result>
+        <result column="SELFSTATUS" property="selfStatus" ></result>
+        <result column="HEART" property="heart" ></result>
+        <result column="HEARTCONT" property="heartCont" ></result>
+        <result column="LUNG" property="lung" ></result>
+        <result column="LUNGCONT" property="lungCont" ></result>
+        <result column="CUNNUS" property="cunnus" ></result>
+        <result column="CUNNUSCONT" property="cunnusCont" ></result>
+        <result column="VAGINA" property="vagina" ></result>
+        <result column="VAGINACONT" property="vaginaCont" ></result>
+        <result column="CERVIX" property="cervix" ></result>
+        <result column="CERVIXCONT" property="cervixCont" ></result>
+        <result column="UTERUS" property="uterus" ></result>
+        <result column="ACCO" property="acco" ></result>
+        <result column="ACCOCONT" property="accoCont" ></result>
+        <result column="FETALPOSITION" property="fetalPosition" ></result>
+        <result column="FETALHR" property="fetalHr" ></result>
+        <result column="ADVISE" property="advise" ></result>
+        <result column="GUIDELIVE" property="guideLive" ></result>
+        <result column="GUIDEPSYCHO" property="guidePsycho" ></result>
+        <result column="GUIDENUTRI" property="guideNutri" ></result>
+        <result column="GUIDEFOOD" property="guideFood" ></result>
+        <result column="GUIDESPORTS" property="guideSports" ></result>
+        <result column="GUIDEMONITOR" property="guideMonitor" ></result>
+        <result column="GUIDPREPARE" property="guidePrepare" ></result>
+        <result column="GUIDEFEED" property="guideFeed" ></result>
+        <result column="GUIDEDEFORMITY" property="guideDeformity" ></result>
+        <result column="GUIDESCREENING" property="guideScreening" ></result>
+        <result column="GUIDEOTHER" property="guideOther" ></result>
+        <result column="TRAN" property="tran" ></result>
+        <result column="TRANDATE" property="tranDate" ></result>
+        <result column="TRANDATEHOUR" property="tranDateHour" ></result>
+        <result column="TRANDATEMINUTE" property="tranDateMinute" ></result>
+        <result column="TRANREASON" property="tranReason" ></result>
+        <result column="TRANORGANCODE" property="tranOrganCode" ></result>
+        <result column="TRANORGAN" property="tranOrgan" ></result>
+        <result column="NEXTCHECK" property="nextCheck" ></result>
+        <result column="NEXTDATE" property="nextDate" ></result>
+        <result column="NEXTCARES" property="nextCares" ></result>
+        <result column="NEXTSCREEN" property="nextScreen" ></result>
+        <result column="NEXTSCREENDATE" property="nextScreenDate" ></result>
+        <result column="NEXTSCREENCARES" property="nextScreenCares" ></result>
     </resultMap>
     <!-- 更新异常信息-->
     <update id="updateErrorMessage">
-        UPDATE IHD.FYB_OUTP_TODAT T SET T.EXCEPTION = #{exception}
+        UPDATE IHD.FYB_OUTP_TODAT T
+        <set>
+            <if test="exception != null and exception != ''">
+                T.EXCEPTION = #{exception},
+            </if>
+            <if test="status != null and status != ''">
+                T.DEAL_STATUS = #{status},
+            </if>
+        </set>
         WHERE T.OUTP_PRE_CHECK_NO = #{outpCheckNo} AND T.PATIENT_ID = #{patientId}
     </update>
     <insert id="insertOutpInfo">
@@ -72,22 +155,106 @@
         REG_TIME,
         STATUS,
         HEALTHCARE_NO,
-        SYS_ID) VALUES(#{outpCheckNo},#{patientId},TO_DATE(#{regTime},'yyyy-mm-dd hh24:mi:ss'),#{status},#{healthcareNo},#{sysId})
+        ID_NO,
+        SYS_ID) VALUES(#{outpCheckNo},#{patientId},TO_DATE(#{regTime},'yyyy-mm-dd hh24:mi:ss'),#{status},#{healthcareNo},#{idNo},#{sysId})
     </insert>
     <!-- 查询时间范围内的通道消息 -->
     <select id="select" resultMap="fybOutTotal">
         SELECT OUTP_PRE_CHECK_NO,
         PATIENT_ID,
         REG_TIME,
-        STATUS FROM IHD.FYB_OUTP_TODAT WHERE STATUS = '0'
-        UNION
-        SELECT OUTP_PRE_CHECK_NO,
-        PATIENT_ID,
-        REG_TIME,
-        STATUS FROM IHD.FYB_OUTP_TODAT WHERE STATUS = '1'
+        ID_NO,
+        STATUS FROM IHD.FYB_OUTP_TODAT WHERE STATUS IN ('0', '1') AND DEAL_STATUS IS NULL
     </select>
+    <update id="update">
+        UPDATE IHD.FYB_OUTP_TODAT T
+        SET T.ID_NO =
+        (SELECT PMI.ID_NO
+        FROM PAT_MASTER_INDEX PMI
+        WHERE PMI.PATIENT_ID = T.PATIENT_ID)
+        WHERE T.DEAL_STATUS IS NULL
+    </update>
+    <!-- 传病人ID号-->
     <select id="selectHealthNoByOutpNo" resultMap="fybOutInfo">
         SELECT T.HEALTHCARE_NO,T.SYS_ID FROM IHD.FYB_OUTP_INFO T WHERE T.OUTP_PRE_CHECK_NO = #{_parameter}
+    </select>
+    <delete id="deleteByOutp">
+        DELETE FROM IHD.FYB_OUTP_TODAT WHERE OUTP_PRE_CHECK_NO = #{_parameter}
+    </delete>
+    <select id="selectWomanCheckByOutpId" resultMap="fybWomanCheck">
+        SELECT
+        TO_CHAR(PMI.DATE_OF_BIRTH,'yyyy-mm-dd') BIRTHDAY,
+        T.NAME,
+        '' AS SYS_ID,
+        '0' AS DB_KEY,
+        '0' AS TB_KEY,
+        '无锡人民医院' AS SRC,
+        '' AS EXT,
+        T.PATIENT_ID,
+        T.OUTP_PRE_CHECK_NO,
+        T.REG_TIME,
+        T.DOCTOR,
+        T.DOCTORID,
+        T.CHECKDATE,
+        T.CHECKSEQ,
+        T.FIRSTCHECK,
+        T.LMP,
+        T.EXPECTEDDATE,
+        T.GESTWEEKS,
+        T.GESTDAYS,
+        T.SUREIMP,
+        T.SUREEXPECTEDDATE,
+        T.SUREWEEKS,
+        T.SUREDAYS,
+        T.HEIGHT,
+        T.WEIGHT,
+        T.SBP,
+        T.DBP,
+        T.FU,
+        T.AC,
+        T.MAINSUIT,
+        T.SELFSTATUS,
+        T.HEART,
+        T.HEARTCONT,
+        T.LUNG,
+        T.LUNGCONT,
+        T.CUNNUS,
+        T.CUNNUSCONT,
+        T.VAGINA,
+        T.VAGINACONT,
+        T.CERVIX,
+        T.CERVIXCONT,
+        T.UTERUS,
+        T.ACCO,
+        T.ACCOCONT,
+        T.FETALPOSITION,
+        T.FETALHR,
+        T.ADVISE,
+        T.GUIDELIVE,
+        T.GUIDEPSYCHO,
+        T.GUIDENUTRI,
+        T.GUIDEFOOD,
+        T.GUIDESPORTS,
+        T.GUIDEMONITOR,
+        T.GUIDEFEED,
+        T.GUIDPREPARE,
+        T.GUIDEDEFORMITY,
+        T.GUIDESCREENING,
+        T.GUIDEOTHER,
+        T.TRAN,
+        T.TRANDATE,
+        T.TRANDATEHOUR,
+        T.TRANDATEMINUTE,
+        T.TRANREASON,
+        T.TRANORGAN,
+        T.TRANORGANCODE,
+        T.NEXTCHECK,
+        T.NEXTDATE,
+        T.NEXTCARES,
+        T.NEXTSCREEN,
+        T.NEXTSCREENDATE,
+        T.NEXTSCREENCARES FROM MEDDOC.PREGNANCY_CARE_V T INNER JOIN PAT_MASTER_INDEX PMI ON T.PATIENT_ID = PMI.PATIENT_ID WHERE
+        OUTP_PRE_CHECK_NO = #{_parameter} AND ROWNUM = 1
     </select>
     <select id="selectWomanMain" resultMap="fybWomanMain">
         SELECT PATIENT_ID,
@@ -136,6 +303,8 @@
         MANOCCUPATION,
         CHECKPERIOD,
         LMP,
-        EXPECTEDDATE FROM IHD.FYB_WOMAN_MAIN T WHERE T.PATIENT_ID = #{patientId} AND T.OUTP_PRE_CHECK_NO = #{outpCheckNo} AND ROWNUM = 1
+        EXPECTEDDATE,
+        GRAVIDITY FROM IHD.FYB_WOMAN_MAIN T WHERE T.PATIENT_ID = #{patientId} AND T.OUTP_PRE_CHECK_NO = #{outpCheckNo} AND ROWNUM = 1
     </select>
+
 </mapper>

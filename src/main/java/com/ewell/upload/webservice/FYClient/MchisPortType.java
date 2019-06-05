@@ -47,8 +47,8 @@ public interface MchisPortType {
      */
     @WebMethod(action = "urn:deleteData")
     @WebResult(targetNamespace = "http://webservice.zhending.com")
-    @RequestWrapper(localName = "deleteData", targetNamespace = "http://webservice.zhending.com", className = "com.ewell.common.webservice.client.DeleteData")
-    @ResponseWrapper(localName = "deleteDataResponse", targetNamespace = "http://webservice.zhending.com", className = "com.ewell.common.webservice.client.DeleteDataResponse")
+    @RequestWrapper(localName = "deleteData", targetNamespace = "http://webservice.zhending.com", className = "DeleteData")
+    @ResponseWrapper(localName = "deleteDataResponse", targetNamespace = "http://webservice.zhending.com", className = "DeleteDataResponse")
     public String deleteData(
             @WebParam(name = "token", targetNamespace = "http://webservice.zhending.com")
                     String token,
@@ -64,8 +64,8 @@ public interface MchisPortType {
      */
     @WebMethod(action = "urn:saveData")
     @WebResult(targetNamespace = "http://webservice.zhending.com")
-    @RequestWrapper(localName = "saveData", targetNamespace = "http://webservice.zhending.com", className = "com.ewell.common.webservice.client.SaveData")
-    @ResponseWrapper(localName = "saveDataResponse", targetNamespace = "http://webservice.zhending.com", className = "com.ewell.common.webservice.client.SaveDataResponse")
+    @RequestWrapper(localName = "saveData", targetNamespace = "http://webservice.zhending.com", className = "SaveData")
+    @ResponseWrapper(localName = "saveDataResponse", targetNamespace = "http://webservice.zhending.com", className = "SaveDataResponse")
     public String saveData(
             @WebParam(name = "token", targetNamespace = "http://webservice.zhending.com")
                     String token,
@@ -81,8 +81,8 @@ public interface MchisPortType {
      */
     @WebMethod(action = "urn:login")
     @WebResult(targetNamespace = "http://webservice.zhending.com")
-    @RequestWrapper(localName = "login", targetNamespace = "http://webservice.zhending.com", className = "com.ewell.common.webservice.client.Login")
-    @ResponseWrapper(localName = "loginResponse", targetNamespace = "http://webservice.zhending.com", className = "com.ewell.common.webservice.client.LoginResponse")
+    @RequestWrapper(localName = "login", targetNamespace = "http://webservice.zhending.com", className = "Login")
+    @ResponseWrapper(localName = "loginResponse", targetNamespace = "http://webservice.zhending.com", className = "LoginResponse")
     public String login(
             @WebParam(name = "loginCode", targetNamespace = "http://webservice.zhending.com")
                     String loginCode,
@@ -98,8 +98,8 @@ public interface MchisPortType {
      */
     @WebMethod(action = "urn:getData")
     @WebResult(targetNamespace = "http://webservice.zhending.com")
-    @RequestWrapper(localName = "getData", targetNamespace = "http://webservice.zhending.com", className = "com.ewell.common.webservice.client.GetData")
-    @ResponseWrapper(localName = "getDataResponse", targetNamespace = "http://webservice.zhending.com", className = "com.ewell.common.webservice.client.GetDataResponse")
+    @RequestWrapper(localName = "getData", targetNamespace = "http://webservice.zhending.com", className = "GetData")
+    @ResponseWrapper(localName = "getDataResponse", targetNamespace = "http://webservice.zhending.com", className = "GetDataResponse")
     public String getData(
             @WebParam(name = "token", targetNamespace = "http://webservice.zhending.com")
                     String token,
@@ -114,7 +114,7 @@ public interface MchisPortType {
      */
     @WebMethod(action = "urn:addCaches")
     @Oneway
-    @RequestWrapper(localName = "addCaches", targetNamespace = "http://webservice.zhending.com", className = "com.ewell.common.webservice.client.AddCaches")
+    @RequestWrapper(localName = "addCaches", targetNamespace = "http://webservice.zhending.com", className = "AddCaches")
     public void addCaches(
             @WebParam(name = "redisCacheManager", targetNamespace = "http://webservice.zhending.com")
                     RedisCacheManager redisCacheManager,

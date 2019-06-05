@@ -13,9 +13,9 @@
         <result property="reportItemCode" column = "REPORT_ITEM_CODE"></result>
         <result property="result" column = "RESULT"></result>
     </resultMap>
-    <select id="selectByPatientId" resultMap="fybLisItemInfo">
+    <select id="selectByOutpId" resultMap="fybLisItemInfo">
         SELECT T.PATIENT_ID,T.VISIT_ID,T.TEST_NO,T.REQUESTED_DATE_TIME,T.FYB_RES_ITEM_NAME,
-        T.FYB_RES_ITEM_CODE,T.REPORT_ITEM_NAME,T.RESULT
-        FROM IHD.FYB_LAB_RESULT T WHERE T.PATIENT_ID = #{_parameter}
+        T.FYB_RES_ITEM_CODE,T.REPORT_ITEM_NAME,T.REPORT_ITEM_CODE,T.RESULT
+        FROM IHD.FYB_LAB_RESULT T WHERE T.VISIT_ID = #{_parameter}
     </select>
 </mapper>

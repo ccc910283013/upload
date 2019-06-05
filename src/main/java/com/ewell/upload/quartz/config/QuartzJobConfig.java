@@ -1,6 +1,12 @@
 package com.ewell.upload.quartz.config;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@ToString
 public class QuartzJobConfig {
     private String jobName;
     private String beanName;
@@ -19,41 +25,17 @@ public class QuartzJobConfig {
                 jobConfig.jobName = taskName;
                 jobConfig.beanName = "recordCardTask";
                 jobConfig.params = null;
+                jobConfig.methodName = "taskMonitorEvent";
+                break;
             case "FYOutpLabMonitor":
                 jobConfig.jobName = taskName;
                 jobConfig.beanName = "pushLabTask";
-                jobConfig.params = null;
-            default:
                 jobConfig.methodName = "taskMonitorEvent";
+                jobConfig.params = null;
+                break;
+            default:
+
         }
         return jobConfig;
     }
-    public static String getCronExpression(String timeInternal){
-
-        return "";
-    }
-    public String getBeanName() {
-        return beanName;
-    }
-    public String getJobName() {
-        return jobName;
-    }
-
-    public String getMethodName() {
-        return methodName;
-    }
-
-    public String getParams() {
-        return params;
-    }
-
-    public String getCronExpression() {
-        return cronExpression;
-    }
-
-    public void setCronExpression(String cronExpression) {
-        this.cronExpression = cronExpression;
-    }
-
-
 }

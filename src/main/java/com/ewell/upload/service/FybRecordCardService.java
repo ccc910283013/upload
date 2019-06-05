@@ -8,4 +8,5 @@ import java.util.List;
 public interface FybRecordCardService {
     List<BaseResponse<FybOutInfo>> cardEventDeal();
     boolean fyRecordDeal(BaseResponse<FybOutInfo> info);
+    List<BaseResponse<FybOutInfo>> test();
 }

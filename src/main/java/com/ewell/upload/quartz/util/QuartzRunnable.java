@@ -1,6 +1,6 @@
 package com.ewell.upload.quartz.util;
 
-import com.ewell.upload.util.SpringContextHolder;
+import com.ewell.upload.config.handler.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ReflectionUtils;
 

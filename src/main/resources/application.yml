@@ -1,19 +1,31 @@
+##########################################################
+##################  所有profile共有的配置  #################
+##########################################################
+
 threadPool:
-  core-pool-size: 10
-  max-pool-size: 50
+  core-pool-size: 5
+  max-pool-size: 10
   queue-capacity: 1000
   keep-alive-seconds: 300
+#动态数据源开关
+muti-datasource-open: false
+
 #配置数据源
 spring:
   profiles:
     active: pro
   datasource:
-    druid:
-      type: com.alibaba.druid.pool.DruidDataSource
-      driverClassName: oracle.jdbc.OracleDriver
+    cluster-druid:
       url: jdbc:oracle:thin:@(DESCRIPTION=(FAILOVER = yes)(ADDRESS = (PROTOCOL = TCP)(HOST =172.20.1.192)(PORT= 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = wxcs)))
       username: system
       password: manager
+#其他业务数据源,正式库
+    druid:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: oracle.jdbc.OracleDriver
+      url: jdbc:oracle:thin:@(DESCRIPTION=(FAILOVER = yes)(ADDRESS = (PROTOCOL = TCP)(HOST =172.20.1.210)(PORT= 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = oracle10)))
+      username: login
+      password: loginmanager
       # 初始化连接大小
       initial-size: 5
       # 最小空闲连接数
@@ -34,14 +46,5 @@ spring:
       max-pool-prepared-statement-per-connection-size: 20
       # 配置监控统计拦截的filters
       filters: stat
-
-      stat-view-servlet:
-        url-pattern: /druid/*
-        reset-enable: false
-        login-username: admin
-        login-password: 123456
-
-      web-stat-filter:
-        url-pattern: /*
-        exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
-
+server:
+  port: ${port}

@@ -9,5 +9,5 @@ import java.util.List;
 @Component
 @Mapper
 public interface FybLisInfoDao {
-     List<FybLisItemInfo> selectByPatientId(String patientId);
+     List<FybLisItemInfo> selectByOutpId(String outpId);
 }

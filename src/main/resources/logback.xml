@@ -9,7 +9,7 @@
     <jmxConfigurator/>
     <!-- 定义日志文件 输出位置 -->
     <!-- <property name="log_dir" value="C:/test" />-->
-    <property name="log_dir" value="C:\log"/>
+    <property name="log_dir" value="C:\log\upload"/>
     <!-- 日志最大的历史 30天 -->
     <property name="maxHistory" value="30"/>
 
@@ -40,7 +40,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志输出位置 可相对、和绝对路径 -->
             <fileNamePattern>
-                C:\log/%d{yyyy-MM-dd}/error-log.log
+                C:\log\upload/%d{yyyy-MM-dd}/error-log.log
             </fileNamePattern>
             <!-- 可选节点，控制保留的归档文件的最大数量，超出数量就删除旧文件假设设置每个月滚动，且<maxHistory>是6， 则只保存最近6个月的文件，删除之前的旧文件。注意，删除旧文件是，那些为了归档而创建的目录也会被删除 -->
             <maxHistory>7</maxHistory>
@@ -67,7 +67,7 @@
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志输出位置 可相对、和绝对路径 -->
-            <fileNamePattern>C:\log/%d{yyyy-MM-dd}/warn-log.log</fileNamePattern>
+            <fileNamePattern>C:\log\upload/%d{yyyy-MM-dd}/warn-log.log</fileNamePattern>
             <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -83,7 +83,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>C:\log/%d{yyyy-MM-dd}/info-log.log</fileNamePattern>
+            <fileNamePattern>C:\log\upload/%d{yyyy-MM-dd}/info-log.log</fileNamePattern>
             <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -99,7 +99,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>C:\log/%d{yyyy-MM-dd}/debug-log.log</fileNamePattern>
+            <fileNamePattern>C:\log\upload/%d{yyyy-MM-dd}/debug-log.log</fileNamePattern>
             <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -115,7 +115,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>C:\log/%d{yyyy-MM-dd}/trace-log.log</fileNamePattern>
+            <fileNamePattern>C:\log\upload/%d{yyyy-MM-dd}/trace-log.log</fileNamePattern>
             <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -136,4 +136,7 @@
         <appender-ref ref="TRACE"/>
     </root>
     <logger name="org" level="WARN"/>
+    <logger name="sun" level="WARN"/>
+    <logger name="javax" level="WARN"/>
+    <logger name="com.sun" level="WARN"/>
 </configuration>

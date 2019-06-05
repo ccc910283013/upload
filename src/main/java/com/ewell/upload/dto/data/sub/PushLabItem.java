@@ -1,30 +1,13 @@
 package com.ewell.upload.dto.data.sub;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
 public class PushLabItem {
     private String itemCode;
     private String itemResult;
-
-    @Override
-    public String toString() {
-        return "PushLabItem{" +
-                "itemCode='" + itemCode + '\'' +
-                ", itemResult='" + itemResult + '\'' +
-                '}';
-    }
-
-    public String getItemCode() {
-        return itemCode;
-    }
-
-    public void setItemCode(String itemCode) {
-        this.itemCode = itemCode;
-    }
-
-    public String getItemResult() {
-        return itemResult;
-    }
-
-    public void setItemResult(String itemResult) {
-        this.itemResult = itemResult;
-    }
 }
