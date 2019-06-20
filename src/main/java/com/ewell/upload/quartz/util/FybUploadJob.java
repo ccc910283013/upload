@@ -49,11 +49,6 @@ public class FybUploadJob extends QuartzJobBean {
                     log.error(e.getMessage());
                 }
             });
-        }else {
-            log.info("查询待推病人检验列表失败------->"+resObject.getMessage());
-        }
-        BaseResponse<List<PushPerson>> examObject = examService.queryPersonWcQtjc();
-        if ("success".equals(resObject.getResult())){
             resObject.getData().forEach(person->{
                 try {
                     QuartzRunnable runnable = new QuartzRunnable("pushExamTask", "taskMonitorEvent", person);
@@ -63,7 +58,8 @@ public class FybUploadJob extends QuartzJobBean {
                 }
             });
         }else {
-            log.info("查询待推病人检查列表失败------->"+resObject.getMessage());
+            log.info("查询待推病人检查检验列表失败------->"+resObject.getMessage());
         }
+
     }
 }

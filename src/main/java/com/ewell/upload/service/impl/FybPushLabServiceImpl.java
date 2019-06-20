@@ -27,8 +27,8 @@ import java.util.List;
 public class FybPushLabServiceImpl implements FybPushLabService {
     @Resource
     private FybLisInfoDao dao;
-    @Resource
-    private Mchis mchis;
+    //@Resource
+    //private Mchis mchis;
 
     /**
      * 获取检验结果待推列表
@@ -49,7 +49,7 @@ public class FybPushLabServiceImpl implements FybPushLabService {
         req.setSource("comLis");
         req.setData(query);
         //System.out.println(JacksonUtil.bean2Json(req));
-        String resStr = mchis.getMchisHttpSoap11Endpoint().//查询妇幼检验结果待推列表
+        String resStr = Mchis.getInstance().getMchisHttpSoap11Endpoint().//查询妇幼检验结果待推列表
                 getData(QuartzJobListener.token.getToken(),JacksonUtil.bean2Json(req));
         //System.out.println(resStr);
         return JacksonUtil.json2Bean(resStr, new TypeReference<BaseResponse<List<PushPerson>>>() {});
@@ -86,7 +86,7 @@ public class FybPushLabServiceImpl implements FybPushLabService {
         req.setOperate("saveWcFzjc");
         req.setRemark("围产辅助检查");
         //System.out.println(JacksonUtil.bean2Json(req));
-        String resStr = mchis.getMchisHttpSoap11Endpoint().//推送病人检验结果
+        String resStr = Mchis.getInstance().getMchisHttpSoap11Endpoint().//推送病人检验结果
                 saveData(QuartzJobListener.token.getToken(),JacksonUtil.bean2Json(req));
         BaseResponse res = JacksonUtil.json2Bean(resStr, new TypeReference<BaseResponse>() {});//获取响应
         //System.out.println(JacksonUtil.bean2Json(req));

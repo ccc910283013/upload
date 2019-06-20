@@ -29,8 +29,8 @@ import java.util.List;
 public class FybPushExamServiceImpl implements FybPushExamService {
     @Resource
     private FybRisInfoDao dao;
-    @Resource
-    private Mchis mchis;
+    //@Resource
+    //private Mchis mchis;
     /**
      * 获取检查结果待推列表
      * @return 返回检查结果待推列表
@@ -43,7 +43,7 @@ public class FybPushExamServiceImpl implements FybPushExamService {
         query.setCheckDate1(DateUtil.timeStampToDate(DateUtil.addDate(new Date(),-2).getTime(),"yyyy-MM-dd"));
         query.setCheckDate2(DateUtil.timeStampToDate(DateUtil.addDate(new Date(),1).getTime(),"yyyy-MM-dd"));
         //-----------------------------------
-        String loginStr = mchis.getMchisHttpSoap11Endpoint().login("320211196412053427","123");
+        String loginStr = Mchis.getInstance().getMchisHttpSoap11Endpoint().login("320211196412053427","123");
         BaseResponse<LoginToken> res = JacksonUtil.json2Bean(loginStr, new TypeReference<BaseResponse<LoginToken>>(){});
         LoginToken l = res.getData();
         //-----------------------------------
@@ -55,7 +55,7 @@ public class FybPushExamServiceImpl implements FybPushExamService {
         req.setData(query);
 //        String resStr = mchis.getMchisHttpSoap11Endpoint().//查询妇幼检验结果待推列表
 //        getData(l.getToken(),JacksonUtil.bean2Json(req));
-        String resStr = mchis.getMchisHttpSoap11Endpoint().//查询妇幼检验结果待推列表
+        String resStr = Mchis.getInstance().getMchisHttpSoap11Endpoint().//查询妇幼检验结果待推列表
                 getData(QuartzJobListener.token.getToken(),JacksonUtil.bean2Json(req));
         return JacksonUtil.json2Bean(resStr, new TypeReference<BaseResponse<List<PushPerson>>>() {});
     }
@@ -86,7 +86,7 @@ public class FybPushExamServiceImpl implements FybPushExamService {
         req.setOperate("saveWcQtjc");
         req.setRemark("围产其他检查");
         //System.out.println(JacksonUtil.bean2Json(req));
-        String resStr = mchis.getMchisHttpSoap11Endpoint().//推送病人检验结果
+        String resStr = Mchis.getInstance().getMchisHttpSoap11Endpoint().//推送病人检验结果
                 saveData(QuartzJobListener.token.getToken(),JacksonUtil.bean2Json(req));
         BaseResponse res = JacksonUtil.json2Bean(resStr, new TypeReference<BaseResponse>() {});//获取响应
         //System.out.println(JacksonUtil.bean2Json(req));

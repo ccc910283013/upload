@@ -1,6 +1,8 @@
 ##########################################################
 ##################  所有profile共有的配置  #################
 ##########################################################
+server:
+  port: 8081
 
 threadPool:
   core-pool-size: 5
@@ -46,5 +48,3 @@ spring:
       max-pool-prepared-statement-per-connection-size: 20
       # 配置监控统计拦截的filters
       filters: stat
-server:
-  port: ${port}

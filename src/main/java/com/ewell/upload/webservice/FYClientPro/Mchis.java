@@ -20,11 +20,21 @@ import javax.xml.ws.WebServiceFeature;
  * 
  */
 @WebServiceClient(name = "Mchis", targetNamespace = "http://webservice.zhending.com", wsdlLocation = "http://10.75.93.91:8080/mchis-controller/services/Mchis?wsdl")
-@Component
 public class Mchis
     extends Service
 {
-
+    ////////////////////  懒汉单例  //////////////////////////
+    private static volatile Mchis mchis;
+    public static Mchis getInstance(){
+        if (mchis == null){
+            synchronized (Mchis.class){
+                if (mchis == null){
+                    mchis = new Mchis();
+                }
+            }
+        }
+        return mchis;
+    }
     private final static URL MCHIS_WSDL_LOCATION;
     private final static WebServiceException MCHIS_EXCEPTION;
     private final static QName MCHIS_QNAME = new QName("http://webservice.zhending.com", "Mchis");

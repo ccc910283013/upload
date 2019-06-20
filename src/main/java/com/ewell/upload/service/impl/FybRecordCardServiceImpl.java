@@ -29,11 +29,11 @@ import java.util.List;
 public class FybRecordCardServiceImpl implements FybRecordCardService {
     @Resource
     private FybOutTotalDao fybOutTotalDao;
-    @Resource
-    private Mchis mchis;
+    //@Resource
+    //private Mchis mchis;
 
-    @Resource
-    private TestServiceImpl testImpl;
+//    @Resource
+//    private TestServiceImpl testImpl;
 
     @Override
     public List<BaseResponse<FybOutInfo>> test() {
@@ -50,7 +50,7 @@ public class FybRecordCardServiceImpl implements FybRecordCardService {
                 //System.out.println("get建卡信息"+JacksonUtil.bean2Json(req));
                 //调阅病人保健号
                 //log.debug("send Fy womanMain----->"+JacksonUtil.bean2Json(req));
-                String resStr = mchis.getMchisHttpSoap11Endpoint().getData(QuartzJobListener.token.getToken(), JacksonUtil.bean2Json(req));
+                String resStr = Mchis.getInstance().getMchisHttpSoap11Endpoint().getData(QuartzJobListener.token.getToken(), JacksonUtil.bean2Json(req));
                 //log.debug("resp Fy womanMain----->"+resStr);
                 BaseResponse<List<FybWomanMain>> res = JacksonUtil.json2Bean(resStr, new TypeReference<BaseResponse<List<FybWomanMain>>>() {
                 });
@@ -123,7 +123,7 @@ public class FybRecordCardServiceImpl implements FybRecordCardService {
                     //System.out.println("get建卡信息"+JacksonUtil.bean2Json(req));
                     //调阅病人保健号
                     //log.debug("send Fy womanMain----->"+JacksonUtil.bean2Json(req));
-                    String resStr = mchis.getMchisHttpSoap11Endpoint().getData(QuartzJobListener.token.getToken(), JacksonUtil.bean2Json(req));
+                    String resStr = Mchis.getInstance().getMchisHttpSoap11Endpoint().getData(QuartzJobListener.token.getToken(), JacksonUtil.bean2Json(req));
                     //log.debug("resp Fy womanMain----->"+resStr);
                     BaseResponse<List<FybWomanMain>> res = JacksonUtil.json2Bean(resStr, new TypeReference<BaseResponse<List<FybWomanMain>>>() {
                     });
@@ -169,7 +169,7 @@ public class FybRecordCardServiceImpl implements FybRecordCardService {
                         infoBody.setData(info);
                         //推送产前检查信息
                         log.debug("send Fy womanCheck----->"+JacksonUtil.bean2Json(reqCheck));
-                        String resStrCheck = mchis.getMchisHttpSoap11Endpoint().saveData(QuartzJobListener.token.getToken(), JacksonUtil.bean2Json(reqCheck));
+                        String resStrCheck = Mchis.getInstance().getMchisHttpSoap11Endpoint().saveData(QuartzJobListener.token.getToken(), JacksonUtil.bean2Json(reqCheck));
                         log.debug("resp Fy womanCheck----->"+resStr);
                         BaseResponse resCheck = JacksonUtil.json2Bean(resStrCheck, new TypeReference<BaseResponse>() {
                         });

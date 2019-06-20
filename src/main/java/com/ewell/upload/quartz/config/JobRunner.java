@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @Slf4j
-//@Component
+@Component
 public class JobRunner implements ApplicationRunner {
     //@Value("${job.Enable}")
     //private boolean jobEnable;//获取job开关

@@ -18,8 +18,8 @@ import javax.annotation.Resource;
 public class QuartzJobListener implements JobListener {
     public static LoginToken token = null;
 
-    @Resource
-    private Mchis mchis;
+    //@Resource
+    //private Mchis mchis;
     /**
      * 获取任务名称
      * @return 返回任务名称
@@ -37,7 +37,7 @@ public class QuartzJobListener implements JobListener {
     public void jobToBeExecuted(JobExecutionContext jobExecutionContext){
         System.out.println("任务将要被执行");
         //320211196412053427  123
-        String loginStr = mchis.getMchisHttpSoap11Endpoint().login("320211196412053427","123");
+        String loginStr = Mchis.getInstance().getMchisHttpSoap11Endpoint().login("320211196412053427","123");
         BaseResponse<LoginToken> res = JacksonUtil.json2Bean(loginStr, new TypeReference<BaseResponse<LoginToken>>(){});
         token = res.getData();
     }
