@@ -1,4 +1,4 @@
-package com.ewell.upload.dto.data.sub;
+package com.ewell.upload.dto.data.push;
 
 import lombok.Getter;
 import lombok.Setter;

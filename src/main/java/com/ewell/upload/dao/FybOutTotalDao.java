@@ -1,9 +1,6 @@
 package com.ewell.upload.dao;
 
-import com.ewell.upload.bean.FybOutInfo;
-import com.ewell.upload.bean.FybOutTotal;
-import com.ewell.upload.bean.FybWomanCheck;
-import com.ewell.upload.bean.FybWomanMain;
+import com.ewell.upload.bean.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -24,6 +21,12 @@ public interface FybOutTotalDao {
      */
     int update();
 
+    /**
+     * 更新数据处理状态
+     * @param fybOutTotals
+     * @return
+     */
+    int updateDealStatus(List<FybOutTotal> fybOutTotals);
     /**
      * 查询是否存在对应的妇幼保健卡号
      * @param outpNo 门诊号
@@ -72,4 +75,7 @@ public interface FybOutTotalDao {
      * @return
      */
     FybWomanCheck selectWomanCheckByOutpId(String outp);
+
+
+
 }

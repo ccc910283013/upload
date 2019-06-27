@@ -1,5 +1,7 @@
 package com.ewell.upload.util;
 
+import com.ewell.upload.bean.FybInpInfo;
+
 public class StringUtils {
     public static boolean isEmpty(CharSequence cs) {
         return cs == null || cs.length() == 0;

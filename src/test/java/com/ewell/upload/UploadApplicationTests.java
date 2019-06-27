@@ -1,22 +1,19 @@
 package com.ewell.upload;
 
-import com.ewell.upload.bean.FybOutInfo;
+import com.ewell.upload.bean.FybMaternalDelivery;
 import com.ewell.upload.bean.FybWomanCheck;
+import com.ewell.upload.dao.FybInpTotalDao;
 import com.ewell.upload.dto.BaseRequest;
 import com.ewell.upload.dto.BaseResponse;
 import com.ewell.upload.dto.data.LoginToken;
-import com.ewell.upload.dto.data.sub.PushPerson;
+import com.ewell.upload.dto.data.push.PushPerson;
 import com.ewell.upload.quartz.task.PushExamTask;
 import com.ewell.upload.quartz.util.QuartzJobListener;
 import com.ewell.upload.service.FybPushExamService;
 import com.ewell.upload.service.FybPushLabService;
 import com.ewell.upload.service.FybRecordCardService;
-import com.ewell.upload.util.JacksonUtil;
-import com.ewell.upload.webservice.FYClientPro.Mchis;
-import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -24,15 +21,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UploadApplicationTests {
-    @Autowired
-    private Mchis mchis;
     @Resource
     private FybPushLabService service;
     @Resource
@@ -43,6 +35,12 @@ public class UploadApplicationTests {
     private FybPushExamService examService;
     @Resource
     PushExamTask pushExamTask;
+    @Resource
+    private FybInpTotalDao fybInpTotalDao;
+    @Test
+    public void testSelect(){
+
+    }
     @Test
     public void test05(){
         BaseResponse<List<PushPerson>> examObject = examService.queryPersonWcQtjc();
@@ -148,33 +146,6 @@ public class UploadApplicationTests {
         req.setOperate("save");
         req.setRemark("孕妇产检");
         return req;
-    }
-    //@Test
-    public void test(){
-        System.out.println("test----------------------------");
-        getToken();
-        System.out.println(QuartzJobListener.token.getToken());
-        List<BaseResponse<FybOutInfo>> infoList = recordService.cardEventDeal();
-        for (int i = 0;i<infoList.size();i++){
-            boolean flag = recordService.fyRecordDeal(infoList.get(i));
-            System.out.println(flag+":"+infoList.get(i).getData().getPatientId());
-            if (flag){
-                BaseRequest<FybWomanCheck> req;
-                if (i==0) {
-                    req = getWomanCheck(infoList.get(i).getData().getHealthcareNo(), infoList.get(i).getData().getIdNo(), infoList.get(i).getData().getOutpCheckNo(),
-                            infoList.get(i).getData().getPatientId(), infoList.get(i).getData().getSysId(),"2019-05-12");
-                }else{
-                    req = getWomanCheck(infoList.get(i).getData().getHealthcareNo(), infoList.get(i).getData().getIdNo(), infoList.get(i).getData().getOutpCheckNo(),
-                            infoList.get(i).getData().getPatientId(), infoList.get(i).getData().getSysId(),"2019-05-13");
-                }
-                System.out.println("产前检查"+JacksonUtil.bean2Json(req));
-                String resStrin = mchis.getMchisHttpSoap11Endpoint().saveData(QuartzJobListener.token.getToken(),JacksonUtil.bean2Json(req));
-                System.out.println(resStrin);
-            }
-        }
-
-        System.out.println("----------------------------");
-
     }
     //@Test
     public void test04(){System.out.println("11111");}

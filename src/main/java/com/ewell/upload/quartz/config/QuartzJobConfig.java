@@ -21,20 +21,25 @@ public class QuartzJobConfig {
     public static QuartzJobConfig getInstance(String taskName){
         QuartzJobConfig jobConfig = new QuartzJobConfig();
         switch (taskName){
-            case "FYRecordCardMonitor":
+            case "FYOutpMonitor":
                 jobConfig.jobName = taskName;
                 jobConfig.beanName = "recordCardTask";
                 jobConfig.params = null;
-                jobConfig.methodName = "taskMonitorEvent";
+                jobConfig.methodName = "taskOutpEvent";
                 break;
-            case "FYOutpLabMonitor":
+            case "FYInpMonitor":
                 jobConfig.jobName = taskName;
-                jobConfig.beanName = "pushLabTask";
+                jobConfig.beanName = "recordCardTask";
+                jobConfig.params = null;
+                jobConfig.methodName = "taskInpEvent";
+                break;
+            case "PushReportTask":
+                jobConfig.jobName = taskName;
+                jobConfig.beanName = "pushReportTask";
                 jobConfig.methodName = "taskMonitorEvent";
                 jobConfig.params = null;
                 break;
             default:
-
         }
         return jobConfig;
     }

@@ -1,9 +1,7 @@
 package com.ewell.upload.quartz.task;
 
-import com.ewell.upload.dto.data.sub.PushPerson;
+import com.ewell.upload.dto.data.push.PushPerson;
 import com.ewell.upload.service.FybPushExamService;
-import com.ewell.upload.service.FybPushLabService;
-import com.ewell.upload.service.FybRecordCardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -21,24 +19,4 @@ public class PushExamTask {
         }
     }
 
-    /*
-            //获取待推病人列表
-        List<BaseResponse<FybOutInfo>> infoList = service.cardEventDeal();
-        infoList.forEach(obj->{
-            boolean flag = service.fyRecordDeal(obj);
-        });
-
-        //合并的逻辑
-        BaseResponse<List<PushPerson>> resObject = labService.queryPersonWcFzjc();
-        if ("success".equals(resObject.getResult())){
-            resObject.getData().forEach(person->{
-                boolean flag = labService.saveWcFzjc(person);
-                if (!flag){
-                    log.info("病人门诊号:"+person.getOutpatientNo()+"未出检验结果");
-                }
-            });
-        }else {
-            log.info("查询待推病人列表失败------->"+resObject.getMessage());
-        }
-     */
 }

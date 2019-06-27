@@ -1,5 +1,8 @@
 package com.ewell.upload.quartz.util;
 
+import com.ewell.upload.dto.BaseResponse;
+import com.ewell.upload.dto.data.push.PushPerson;
+import com.ewell.upload.service.FybPushLabService;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -8,11 +11,14 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.concurrent.Future;
 
 @Slf4j
 @Async
 public class ExecutionJob extends QuartzJobBean{
+    @Resource
+    private FybPushLabService labService;
     @Resource
     private ThreadPoolTaskExecutor executor;
     @Override
@@ -21,14 +27,34 @@ public class ExecutionJob extends QuartzJobBean{
         String methodName = (String)jobExecutionContext.getMergedJobDataMap().get("beanMethod");//获取任务方法名称
         Object params = jobExecutionContext.getMergedJobDataMap().get("params");//获取任务参数
         try{
-            /*
-            if ("".equals(beanName)){
-
+            if ("pushJob".equals(beanName)){
+                BaseResponse<List<PushPerson>> resObject = labService.queryPersonWcFzjc();
+                if ("success".equals(resObject.getResult())){
+                    //List<List<PushPerson>> personListasList = ListUtil.averageAssign(resObject.getData(),5);
+                    resObject.getData().forEach(person->{
+                        try {
+                            QuartzRunnable runnable = new QuartzRunnable("pushLabTask", "taskMonitorEvent", person);
+                            executor.execute(runnable);
+                        }catch (NoSuchMethodException e){
+                            log.error(e.getMessage());
+                        }
+                    });
+                    resObject.getData().forEach(person->{
+                        try {
+                            QuartzRunnable runnable = new QuartzRunnable("pushExamTask", "taskMonitorEvent", person);
+                            executor.execute(runnable);
+                        }catch (NoSuchMethodException e){
+                            log.error(e.getMessage());
+                        }
+                    });
+                }else {
+                    log.info("查询待推病人检查检验列表失败------->"+resObject.getMessage());
+                }
+            }else {
+                QuartzRunnable task = new QuartzRunnable(beanName, methodName, params);
+                Future<?> future = executor.submit(task);
+                future.get();
             }
-            */
-            QuartzRunnable task = new QuartzRunnable(beanName, methodName, params);
-            Future<?> future = executor.submit(task);
-            future.get();
         }catch (Exception e){
             log.error("定时器异常------>"+e.getMessage());
         }

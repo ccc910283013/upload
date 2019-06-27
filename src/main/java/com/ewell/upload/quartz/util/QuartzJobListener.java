@@ -3,7 +3,7 @@ package com.ewell.upload.quartz.util;
 import com.ewell.upload.dto.BaseResponse;
 import com.ewell.upload.dto.data.LoginToken;
 import com.ewell.upload.util.JacksonUtil;
-import com.ewell.upload.webservice.FYClientPro.Mchis;
+import com.ewell.upload.webservice.client.Mchis;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
@@ -38,6 +38,7 @@ public class QuartzJobListener implements JobListener {
         System.out.println("任务将要被执行");
         //320211196412053427  123
         String loginStr = Mchis.getInstance().getMchisHttpSoap11Endpoint().login("320211196412053427","123");
+        //log.info(loginStr);
         BaseResponse<LoginToken> res = JacksonUtil.json2Bean(loginStr, new TypeReference<BaseResponse<LoginToken>>(){});
         token = res.getData();
     }

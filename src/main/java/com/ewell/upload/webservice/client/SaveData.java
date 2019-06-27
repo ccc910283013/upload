@@ -1,8 +1,12 @@
 
-package com.ewell.upload.webservice.FYClient;
+package com.ewell.upload.webservice.client;
 
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -30,8 +34,8 @@ import javax.xml.bind.annotation.*;
     "token",
     "json"
 })
-@XmlRootElement(name = "deleteData")
-public class DeleteData {
+@XmlRootElement(name = "saveData")
+public class SaveData {
 
     @XmlElementRef(name = "token", namespace = "http://webservice.zhending.com", type = JAXBElement.class, required = false)
     protected JAXBElement<String> token;

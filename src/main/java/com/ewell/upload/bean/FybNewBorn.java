@@ -1,0 +1,94 @@
+package com.ewell.upload.bean;
+
+import lombok.Data;
+
+/**
+ * 按驼峰规则建表命名
+ */
+@Data
+public class FybNewBorn {
+    private String inpNo;
+    private String babyNo;
+    private String deliDoctor;
+    private String deliSignDate;
+    private String mumHealthNo;
+    private String healthNo;
+    private String name;
+    private String sex;
+    private String gravidityNum;
+    private String birthSort;
+    private String weight;
+    private String height;
+    private String headSize;
+    private String defect6;
+    private String defectDetail6;
+    private String defectCont6;
+    private String apgar1;
+    private String apgar5;
+    private String apgar10;
+    private String salvage;
+    private String salvageCont;
+    private String salvageOther;
+    private String birthResult;
+    private String earlyDeath;
+    private String birthday;
+    private String birthdayHour;
+    private String birthdayMinute;
+    private String age;
+    private String birthWeeks;
+    private String birthDays;
+    private String deliMethod;
+    private String gravidity;
+    private String parity;
+    private String mumName;
+    private String mumBah;
+    private String mumCardType;
+    private String mumCardNo;
+    private String mumBirthday;
+    private String mumAge;
+    private String mumNationality;
+    private String mumNation;
+    private String birthProv;
+    private String birthCity;
+    private String birthCounty;
+    private String birthAddrCode;
+    private String neopathy;
+    private String neopathyCont;
+    private String neopathyOther;
+    private String outHospDate;
+    private String birthOther;
+    private String birthCode;
+    private String vk;
+    private String vkTimes;
+    private String vkMg;
+    private String hepb;
+    private String hepbNo;
+    private String hepbExpiryDate;
+    private String hepbCompany;
+    private String hepbPosition;
+    private String hepbDate;
+    private String hepbDateHour;
+    private String hepbDateMinute;
+    private String hepbDoctor;
+    private String hepbOrgan;
+    private String hbig;
+    private String hbigDate;
+    private String hbigDateHour;
+    private String hbigDateMinute;
+    private String hbigNo;
+    private String hbigExpiryDate;
+    private String hbigCompany;
+    private String hbigPosition;
+    private String hbigDoctor;
+    private String hbigOrgan;
+    private String bcg;
+    private String bcgDate;
+    private String bcgDateHour;
+    private String bcgDateMinute;
+    private String bcgNo;
+    private String bcgExpiryDate;
+    private String bcgCompany;
+    private String bcgPosition;
+    private String bcgDoctor;
+    private String bcgOrgan;
+}

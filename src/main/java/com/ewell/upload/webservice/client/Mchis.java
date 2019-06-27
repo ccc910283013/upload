@@ -1,12 +1,14 @@
 
-package com.ewell.upload.webservice.FYClient;
+package com.ewell.upload.webservice.client;
 
-import org.springframework.stereotype.Component;
-
-import javax.xml.namespace.QName;
-import javax.xml.ws.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
+import javax.xml.ws.WebEndpoint;
+import javax.xml.ws.WebServiceClient;
+import javax.xml.ws.WebServiceException;
+import javax.xml.ws.WebServiceFeature;
 
 
 /**
@@ -15,11 +17,22 @@ import java.net.URL;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "Mchis", targetNamespace = "http://webservice.zhending.com", wsdlLocation = "http://10.75.93.91:8090/mchis-controller/services/Mchis?wsdl")
+@WebServiceClient(name = "Mchis", targetNamespace = "http://webservice.zhending.com", wsdlLocation = "http://180.169.207.206:20011/mchis-controller/services/Mchis?wsdl")
 public class Mchis
     extends Service
 {
-
+    ////////////////////  懒汉单例  //////////////////////////
+    private static volatile Mchis mchis;
+    public static Mchis getInstance(){
+        if (mchis == null){
+            synchronized (Mchis.class){
+                if (mchis == null){
+                    mchis = new Mchis();
+                }
+            }
+        }
+        return mchis;
+    }
     private final static URL MCHIS_WSDL_LOCATION;
     private final static WebServiceException MCHIS_EXCEPTION;
     private final static QName MCHIS_QNAME = new QName("http://webservice.zhending.com", "Mchis");
@@ -28,7 +41,7 @@ public class Mchis
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://10.75.93.91:8090/mchis-controller/services/Mchis?wsdl");
+            url = new URL("http://180.169.207.206:20011/mchis-controller/services/Mchis?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
@@ -73,7 +86,7 @@ public class Mchis
     /**
      * 
      * @param features
-     *     A list of {@link WebServiceFeature} to configure on the proxy.  Supported features not in the <code>features</code> parameter will have their default values.
+     *     A list of {@link javax.xml.ws.WebServiceFeature} to configure on the proxy.  Supported features not in the <code>features</code> parameter will have their default values.
      * @return
      *     returns MchisPortType
      */

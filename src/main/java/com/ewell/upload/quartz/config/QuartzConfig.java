@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 定时任务配置
- * @author
+ * @author cc
  * @date 2019-01-07
  */
 @Configuration

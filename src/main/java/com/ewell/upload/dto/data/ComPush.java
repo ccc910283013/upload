@@ -1,6 +1,6 @@
 package com.ewell.upload.dto.data;
 
-import com.ewell.upload.dto.data.sub.PushPerson;
+import com.ewell.upload.dto.data.push.PushPerson;
 import lombok.Data;
 
 import java.util.List;

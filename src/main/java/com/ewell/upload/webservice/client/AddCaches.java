@@ -1,10 +1,15 @@
 
-package com.ewell.upload.webservice.FYClient;
+package com.ewell.upload.webservice.client;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -19,7 +24,7 @@ import java.util.List;
  *       &lt;sequence>
  *         &lt;element name="redisCacheManager" type="{http://utils.zhending.com/xsd}RedisCacheManager" minOccurs="0"/>
  *         &lt;element name="keys" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="keyChild" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="keyChilds" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -32,7 +37,7 @@ import java.util.List;
 @XmlType(name = "", propOrder = {
     "redisCacheManager",
     "keys",
-    "keyChild"
+    "keyChilds"
 })
 @XmlRootElement(name = "addCaches")
 public class AddCaches {
@@ -41,8 +46,8 @@ public class AddCaches {
     protected JAXBElement<RedisCacheManager> redisCacheManager;
     @XmlElement(nillable = true)
     protected List<String> keys;
-    @XmlElementRef(name = "keyChild", namespace = "http://webservice.zhending.com", type = JAXBElement.class, required = false)
-    protected JAXBElement<String> keyChild;
+    @XmlElementRef(name = "keyChilds", namespace = "http://webservice.zhending.com", type = JAXBElement.class, required = false)
+    protected JAXBElement<String> keyChilds;
 
     /**
      * 获取redisCacheManager属性的值。
@@ -98,27 +103,27 @@ public class AddCaches {
     }
 
     /**
-     * 获取keyChild属性的值。
+     * 获取keyChilds属性的值。
      * 
      * @return
      *     possible object is
      *     {@link JAXBElement }{@code <}{@link String }{@code >}
      *     
      */
-    public JAXBElement<String> getKeyChild() {
-        return keyChild;
+    public JAXBElement<String> getKeyChilds() {
+        return keyChilds;
     }
 
     /**
-     * 设置keyChild属性的值。
+     * 设置keyChilds属性的值。
      * 
      * @param value
      *     allowed object is
      *     {@link JAXBElement }{@code <}{@link String }{@code >}
      *     
      */
-    public void setKeyChild(JAXBElement<String> value) {
-        this.keyChild = value;
+    public void setKeyChilds(JAXBElement<String> value) {
+        this.keyChilds = value;
     }
 
 }

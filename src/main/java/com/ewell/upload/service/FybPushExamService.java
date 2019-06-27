@@ -2,7 +2,7 @@ package com.ewell.upload.service;
 
 
 import com.ewell.upload.dto.BaseResponse;
-import com.ewell.upload.dto.data.sub.PushPerson;
+import com.ewell.upload.dto.data.push.PushPerson;
 
 import java.util.List;
 

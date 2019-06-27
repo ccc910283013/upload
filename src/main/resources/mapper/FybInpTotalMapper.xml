@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://www.mybatis.apache.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ewell.upload.dao.FybInpTotalDao">
+    <update id="updateDealStatus" parameterType="java.util.List">
+        UPDATE IHD.FYB_INP_TODAT T SET T.DEAL_STATUS = '3' WHERE T.INP_NO IN
+        <foreach collection="list"  item="fybInpTotal" open="("
+                 separator="," close=")">
+            #{fybInpTotal.inpNo}
+        </foreach>
+    </update>
+</mapper>

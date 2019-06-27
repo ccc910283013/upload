@@ -1,7 +1,9 @@
 package com.ewell.upload.quartz.task;
 
+import com.ewell.upload.bean.FybInpInfo;
 import com.ewell.upload.bean.FybOutInfo;
 import com.ewell.upload.dto.BaseResponse;
+import com.ewell.upload.service.FybInpService;
 import com.ewell.upload.service.FybRecordCardService;
 import com.ewell.upload.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -11,23 +13,36 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Slf4j
-//@Component(value = "recordCardTask")
+@Component(value = "recordCardTask")
 public class RecordCardTask {
     @Resource
-    private FybRecordCardService service;
-    public void taskMonitorEvent() throws Exception{
-        log.info("in-------------------------------"+DateUtil.getCurrentTime()+" "+Thread.currentThread());
-        /*
-        List<BaseResponse<FybOutInfo>> infoList = service.cardEventDeal();
+    private FybRecordCardService fybRecordCardService;
+    @Resource
+    private FybInpService fybInpService;
+
+    /**
+     * 门诊任务
+     */
+    public void taskOutpEvent() throws Exception{
+        //log.info("in-------------------------------"+DateUtil.getCurrentTime()+" "+Thread.currentThread());
+        //获取待推病人列表
+        List<BaseResponse<FybOutInfo>> infoList = fybRecordCardService.cardEventDeal();
         infoList.forEach(obj->{
-            boolean flag = service.fyRecordDeal(obj);
-            if (flag){
-                System.out.println("建档成功"+obj.getData().getPatientId());
-            }else{
-                System.out.println("未完成建档"+obj.getData().getPatientId());
-            }
+            fybRecordCardService.fyRecordDeal(obj);
         });
-        */
-        log.info("exit-------------------------------"+DateUtil.getCurrentTime()+" "+Thread.currentThread());
+        //log.info("exit-------------------------------"+DateUtil.getCurrentTime()+" "+Thread.currentThread());
+    }
+
+    /**
+     * 住院任务
+     */
+    public void taskInpEvent() throws Exception{
+        //log.info("in-------------------------------"+DateUtil.getCurrentTime()+" "+Thread.currentThread());
+        //获取待推病人列表
+        List<BaseResponse<FybInpInfo>> infoList = fybInpService.cardEventDeal();
+        infoList.forEach(obj->{
+            fybInpService.fyRecordDeal(obj);
+        });
+        //log.info("exit-------------------------------"+DateUtil.getCurrentTime()+" "+Thread.currentThread());
     }
 }

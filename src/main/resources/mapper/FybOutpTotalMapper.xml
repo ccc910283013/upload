@@ -3,65 +3,65 @@
         "http://www.mybatis.apache.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ewell.upload.dao.FybOutTotalDao">
     <resultMap id="fybOutTotal" type="FybOutTotal">
-        <id column="OUTP_PRE_CHECK_NO" property="outpCheckNo" ></id>
-        <result column="PATIENT_ID" property="patientId"></result>
-        <result column="REG_TIME" property="regTime"></result>
-        <result column="ID_NO" property="idNo"></result>
-        <result column="STATUS" property="status"></result>
+        <id column="OUTP_PRE_CHECK_NO" property="outpCheckNo" />
+        <result column="PATIENT_ID" property="patientId"/>
+        <result column="REG_TIME" property="regTime"/>
+        <result column="ID_NO" property="idNo"/>
+        <result column="STATUS" property="status"/>
     </resultMap>
     <resultMap id="fybOutInfo" type="FybOutInfo" extends="fybOutTotal">
-        <result column="HEALTHCARE_NO" property="healthcareNo"></result>
-        <result column="SYS_ID" property="sysId"></result>
+        <result column="HEALTHCARE_NO" property="healthcareNo"/>
+        <result column="SYS_ID" property="sysId"/>
     </resultMap>
     <resultMap id="fybWomanMain" type="FybWomanMain">
-        <id column="PATIENT_ID" property="patientNo"></id>
-        <result column="OUTP_PRE_CHECK_NO" property="outpatientNo"></result>
-        <result column="SYSID" property="sysId"></result>
-        <result column="SRC" property="src"></result>
-        <result column="UPLOADTIME" property="uploadTime"></result>
-        <result column="ORGANCODE" property="organCode"></result>
-        <result column="ORGAN" property="organ"></result>
-        <result column="RECORDORGANCODE" property="recordOrganCode"></result>
-        <result column="RECORDORGAN" property="recordOrgan"></result>
-        <result column="DOCTORCODE" property="doctorCode"></result>
-        <result column="DOCTOR" property="doctor"></result>
-        <result column="CHECKDATE" property="checkDate" javaType="java.lang.String" jdbcType="DATE" typeHandler="com.ewell.upload.util.DBDateTypeHandler"></result>
-        <result column="INPUTORGANCODE" property="inputOrganCode"></result>
-        <result column="INPUTORGAN" property="inputOrgan"></result>
-        <result column="INPUTDOCTORCODE" property="inputDoctorCode"></result>
-        <result column="INPUTDOCTOR" property="inputDoctor"></result>
-        <result column="INPUTDATE" property="inputDate"></result>
-        <result column="NAME" property="name"></result>
-        <result column="IDCARD" property="idcard"></result>
-        <result column="BIRTHDAY" property="birthday"></result>
-        <result column="CARDTYPE" property="cardType"></result>
-        <result column="CARDNO" property="cardNo"></result>
-        <result column="AGE" property="age"></result>
-        <result column="NATIONALITY" property="nationality"></result>
-        <result column="NATION" property="nation"></result>
-        <result column="TEL" property="tel"></result>
-        <result column="DOMICILETYPE" property="domicileType"></result>
-        <result column="DOMICILEMODE" property="domicileMode"></result>
-        <result column="ADDRCODE" property="addrCode"></result>
-        <result column="PROV" property="prov"></result>
-        <result column="CITY" property="city"></result>
-        <result column="COUNTY" property="county"></result>
-        <result column="TOWN" property="town"></result>
-        <result column="MANNOT" property="manNot"></result>
-        <result column="MANNAME" property="manName"></result>
-        <result column="MANCARDTYPE" property="manCardType"></result>
-        <result column="MANCARDNO" property="manCardNo"></result>
-        <result column="MANBIRTHDAY" property="manBirthday"></result>
-        <result column="MANAGE" property="manAge"></result>
-        <result column="MANNATIONALITY" property="manNationality"></result>
-        <result column="MANNATION" property="manNation"></result>
-        <result column="MANTEL" property="manTel"></result>
-        <result column="MANEDUCATION" property="manEducation"></result>
-        <result column="MANOCCUPATION" property="manOccupation"></result>
-        <result column="CHECKPERIOD" property="checkPeriod"></result>
-        <result column="LMP" property="lmp"></result>
-        <result column="EXPECTEDDATE" property="expectedDate"></result>
-        <result column="GRAVIDITY" property="gravidity"></result>
+        <id column="PATIENT_ID" property="patientNo"/>
+        <result column="OUTP_PRE_CHECK_NO" property="outpatientNo"/>
+        <result column="SYSID" property="sysId"/>
+        <result column="SRC" property="src"/>
+        <result column="UPLOADTIME" property="uploadTime"/>
+        <result column="ORGANCODE" property="organCode"/>
+        <result column="ORGAN" property="organ"/>
+        <result column="RECORDORGANCODE" property="recordOrganCode"/>
+        <result column="RECORDORGAN" property="recordOrgan"/>
+        <result column="DOCTORCODE" property="doctorCode"/>
+        <result column="DOCTOR" property="doctor"/>
+        <result column="CHECKDATE" property="checkDate" javaType="java.lang.String" jdbcType="DATE" typeHandler="com.ewell.upload.util.DBDateTypeHandler"/>
+        <result column="INPUTORGANCODE" property="inputOrganCode"/>
+        <result column="INPUTORGAN" property="inputOrgan"/>
+        <result column="INPUTDOCTORCODE" property="inputDoctorCode"/>
+        <result column="INPUTDOCTOR" property="inputDoctor"/>
+        <result column="INPUTDATE" property="inputDate"/>
+        <result column="NAME" property="name"/>
+        <result column="IDCARD" property="idcard"/>
+        <result column="BIRTHDAY" property="birthday"/>
+        <result column="CARDTYPE" property="cardType"/>
+        <result column="CARDNO" property="cardNo"/>
+        <result column="AGE" property="age"/>
+        <result column="NATIONALITY" property="nationality"/>
+        <result column="NATION" property="nation"/>
+        <result column="TEL" property="tel"/>
+        <result column="DOMICILETYPE" property="domicileType"/>
+        <result column="DOMICILEMODE" property="domicileMode"/>
+        <result column="ADDRCODE" property="addrCode"/>
+        <result column="PROV" property="prov"/>
+        <result column="CITY" property="city"/>
+        <result column="COUNTY" property="county"/>
+        <result column="TOWN" property="town"/>
+        <result column="MANNOT" property="manNot"/>
+        <result column="MANNAME" property="manName"/>
+        <result column="MANCARDTYPE" property="manCardType"/>
+        <result column="MANCARDNO" property="manCardNo"/>
+        <result column="MANBIRTHDAY" property="manBirthday"/>
+        <result column="MANAGE" property="manAge"/>
+        <result column="MANNATIONALITY" property="manNationality"/>
+        <result column="MANNATION" property="manNation"/>
+        <result column="MANTEL" property="manTel"/>
+        <result column="MANEDUCATION" property="manEducation"/>
+        <result column="MANOCCUPATION" property="manOccupation"/>
+        <result column="CHECKPERIOD" property="checkPeriod"/>
+        <result column="LMP" property="lmp"/>
+        <result column="EXPECTEDDATE" property="expectedDate"/>
+        <result column="GRAVIDITY" property="gravidity"/>
     </resultMap>
     <resultMap id="fybWomanCheck" type="FybWomanCheck">
         <result column="NAME" property="Name"></result>
@@ -164,7 +164,7 @@
         PATIENT_ID,
         REG_TIME,
         ID_NO,
-        STATUS FROM IHD.FYB_OUTP_TODAT WHERE STATUS IN ('0', '1') AND DEAL_STATUS IS NULL
+        STATUS FROM IHD.FYB_OUTP_TODAT WHERE STATUS IN ('0', '1') AND DEAL_STATUS IS NULL AND <![CDATA[ROWNUM < 1000]]> ORDER BY REG_TIME DESC
     </select>
     <update id="update">
         UPDATE IHD.FYB_OUTP_TODAT T
@@ -173,6 +173,14 @@
         FROM PAT_MASTER_INDEX PMI
         WHERE PMI.PATIENT_ID = T.PATIENT_ID)
         WHERE T.DEAL_STATUS IS NULL
+    </update>
+
+    <update id="updateDealStatus" parameterType="java.util.List">
+        UPDATE IHD.FYB_OUTP_TODAT T SET T.DEAL_STATUS = '3' WHERE T.OUTP_PRE_CHECK_NO IN
+        <foreach collection="list"  item="fybOutTotal" open="("
+                 separator="," close=")">
+            #{fybOutTotal.outpCheckNo}
+        </foreach>
     </update>
     <!-- 传病人ID号-->
     <select id="selectHealthNoByOutpNo" resultMap="fybOutInfo">
@@ -306,5 +314,7 @@
         EXPECTEDDATE,
         GRAVIDITY FROM IHD.FYB_WOMAN_MAIN T WHERE T.PATIENT_ID = #{patientId} AND T.OUTP_PRE_CHECK_NO = #{outpCheckNo} AND ROWNUM = 1
     </select>
-
+    <!--<select id="selectAllWomanDelivery" resultType="com.ewell.upload.dto.data.WomanDelivery">-->
+        <!--SELECT * FROM IHD.FYB_MATERNAL_DELIVERY-->
+    <!--</select>-->
 </mapper>

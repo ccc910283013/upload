@@ -2,7 +2,7 @@
 ##################  所有profile共有的配置  #################
 ##########################################################
 server:
-  port: 8081
+  port: ${port}
 
 threadPool:
   core-pool-size: 5
@@ -15,19 +15,16 @@ muti-datasource-open: false
 #配置数据源
 spring:
   profiles:
-    active: pro
+    active: dev
   datasource:
     cluster-druid:
-      url: jdbc:oracle:thin:@(DESCRIPTION=(FAILOVER = yes)(ADDRESS = (PROTOCOL = TCP)(HOST =172.20.1.192)(PORT= 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = wxcs)))
-      username: system
-      password: manager
+      url: ${dataSource.cluster.url}
+      username: ${dataSource.cluster.user}
+      password: ${dataSource.cluster.password}
 #其他业务数据源,正式库
     druid:
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: oracle.jdbc.OracleDriver
-      url: jdbc:oracle:thin:@(DESCRIPTION=(FAILOVER = yes)(ADDRESS = (PROTOCOL = TCP)(HOST =172.20.1.210)(PORT= 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = oracle10)))
-      username: login
-      password: loginmanager
       # 初始化连接大小
       initial-size: 5
       # 最小空闲连接数
@@ -48,3 +45,29 @@ spring:
       max-pool-prepared-statement-per-connection-size: 20
       # 配置监控统计拦截的filters
       filters: stat
+---
+#####################################################################
+########################  生产环境profile  ##########################
+#####################################################################
+#配置数据源
+spring:
+  profiles: pro
+  datasource:
+#核心业务数据源,测试库
+    druid:
+      url: ${dataSource.pro.url}
+      username: ${dataSource.pro.user}
+      password: ${dataSource.pro.password}
+---
+#####################################################################
+########################  开发环境profile  ##########################
+#####################################################################
+#配置数据源
+spring:
+  profiles: dev
+  datasource:
+#核心业务数据源,测试库
+    druid:
+      url: ${dataSource.dev.url}
+      username: ${dataSource.dev.user}
+      password: ${dataSource.dev.password}

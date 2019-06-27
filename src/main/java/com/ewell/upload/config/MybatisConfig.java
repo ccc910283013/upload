@@ -48,5 +48,9 @@ public class MybatisConfig {
         SqlSessionFactoryBean mutiSfb = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setMapperLocations(mutiRes.getResources("classpath:mapper/*.xml"));
         sqlSessionFactoryBean.setTypeAliasesPackage("com.ewell.upload.bean");
+        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        configuration.setMapUnderscoreToCamelCase(true);
+        //下划线转驼峰
+        sqlSessionFactoryBean.setConfiguration(configuration);
     }
 }

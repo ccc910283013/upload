@@ -13,6 +13,7 @@ import com.ewell.upload.service.FybRecordCardService;
 import com.ewell.upload.util.DateUtil;
 import com.ewell.upload.util.JacksonUtil;
 import com.ewell.upload.util.StringUtils;
+import com.ewell.upload.util.UploadConstant;
 import com.ewell.upload.webservice.FYClientPro.Mchis;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.sun.tools.rngom.parse.host.Base;
@@ -111,6 +112,9 @@ public class FybRecordCardServiceImpl implements FybRecordCardService {
         List<BaseResponse<FybOutInfo>> outInfoList = new ArrayList<>();
         //查询门诊待上传病人
         List<FybOutTotal> totalList = fybOutTotalDao.select();
+        if (totalList.size()>0){
+            fybOutTotalDao.updateDealStatus(totalList);
+        }
         totalList.forEach(totalObject->{
             if (StringUtils.isNotEmpty(totalObject.getIdNo())) {
                 if (fybOutTotalDao.selectHealthNoByOutpNo(totalObject.getOutpCheckNo()) == null)//判断是否存在当前病人
@@ -140,7 +144,7 @@ public class FybRecordCardServiceImpl implements FybRecordCardService {
                         FybWomanCheck check = fybOutTotalDao.selectWomanCheckByOutpId(totalObject.getOutpCheckNo());
                         if (null==check){
                             infoBody.setData(info);
-                            infoBody.setResult("fail");
+                            infoBody.setResult(UploadConstant.FAIL);
                             infoBody.setMessage("不存在病历信息");
                             outInfoList.add(infoBody);
                             return;
@@ -177,14 +181,14 @@ public class FybRecordCardServiceImpl implements FybRecordCardService {
                             infoBody.setResult(res.getResult());
                             infoBody.setMessage(res.getMessage());
                         } else {
-                            infoBody.setResult("fail");
+                            infoBody.setResult(UploadConstant.FAIL);
                             infoBody.setMessage(resCheck.getMessage());
                         }
                     } else {
                         info.setSysId("");//暂不做建档，目前为调阅sysId，无用
                         info.setHealthcareNo("");
                         infoBody.setData(info);
-                        infoBody.setResult("fail");
+                        infoBody.setResult(UploadConstant.FAIL);
                         infoBody.setMessage("调阅病人保健号失败");
                     }
                     outInfoList.add(infoBody);
@@ -212,7 +216,7 @@ public class FybRecordCardServiceImpl implements FybRecordCardService {
                 info.setStatus(totalObject.getStatus());
                 info.setRegTime(totalObject.getRegTime());
                 info.setIdNo(totalObject.getIdNo());
-                infoBody.setResult("fail");
+                infoBody.setResult(UploadConstant.FAIL);
                 infoBody.setMessage("病人ID_NO为空");
                 infoBody.setData(info);
                 outInfoList.add(infoBody);
@@ -220,37 +224,4 @@ public class FybRecordCardServiceImpl implements FybRecordCardService {
         });
         return outInfoList;
     }
-
-      /*
-                病人建档测试数据
-                FybWomanMain womanMain = fybOutTotalDao.selectWomanMain(totalObject.getPatientId(),totalObject.getOutpCheckNo());
-                womanMain.setOrgan("");
-                womanMain.setOrganCode("");
-                womanMain.setRecordOrgan("");
-                womanMain.setRecordOrganCode("");
-                womanMain.setDoctorCode("");
-                womanMain.setDoctor("");
-                womanMain.setCheckDate("");
-                /*
-                womanMain.setIdcard("440126196109094249");
-                womanMain.setExpectedDate("2017-02-02 00:00:00");
-                womanMain.setTel("13958701111");
-                womanMain.setLmp("2017-02-02 00:00:00");
-                womanMain.setProv("浙江省");
-                womanMain.setCounty("苍南");
-                womanMain.setAddrCode("1234546");
-                womanMain.setAge("30");
-                womanMain.setGravidity("1");
-                womanMain.setCity("杭州");
-                womanMain.setCardNo("330327199901220222");
-                womanMain.setCheckDate("");
-
-                BaseRequest<FybWomanMain> req = new BaseRequest<FybWomanMain>();
-                req.setData(womanMain);
-                req.setSource("womanMain");
-                req.setOperate("save");
-                req.setRemark("孕妇建卡");
-                String resStr = mchis.getMchisHttpSoap11Endpoint().saveData(QuartzJobListener.token.getToken(),JacksonUtil.bean2Json(req));
-                */
-    //
 }
