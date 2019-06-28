@@ -1,11 +1,13 @@
 package com.ewell.upload;
 
+import com.ewell.upload.bean.FybInpTotal;
 import com.ewell.upload.bean.FybMaternalDelivery;
 import com.ewell.upload.bean.FybWomanCheck;
 import com.ewell.upload.dao.FybInpTotalDao;
 import com.ewell.upload.dto.BaseRequest;
 import com.ewell.upload.dto.BaseResponse;
 import com.ewell.upload.dto.data.LoginToken;
+import com.ewell.upload.dto.data.WomanDelivery;
 import com.ewell.upload.dto.data.push.PushPerson;
 import com.ewell.upload.quartz.task.PushExamTask;
 import com.ewell.upload.quartz.util.QuartzJobListener;
@@ -38,7 +40,7 @@ public class UploadApplicationTests {
     @Resource
     private FybInpTotalDao fybInpTotalDao;
     @Test
-    public void testSelect(){
+    public void inpUpload(){
 
     }
     @Test

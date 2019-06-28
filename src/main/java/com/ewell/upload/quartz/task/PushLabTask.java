@@ -11,13 +11,12 @@ import javax.annotation.Resource;
 @Slf4j
 @Component(value = "pushLabTask")
 public class PushLabTask {
-    @Resource
-    private FybRecordCardService service;
+
     @Resource
     private FybPushLabService labService;
     public void taskMonitorEvent(PushPerson person) throws Exception{
         Boolean flag = labService.saveWcFzjc(person);
-        if (log.isTraceEnabled()){
+        if (log.isInfoEnabled()){
             log.info(Thread.currentThread()+"执行上传检验"+(flag?"成功":"失败")+"病人门诊号:"+person.getOutpatientNo());
         }
     }

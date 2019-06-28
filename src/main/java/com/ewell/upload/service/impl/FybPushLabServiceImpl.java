@@ -41,8 +41,6 @@ public class FybPushLabServiceImpl implements FybPushLabService {
         //设置查询范围 checkDate1 --> checkDate2
         query.setCheckDate1(DateUtil.timeStampToDate(DateUtil.addDate(new Date(),-2).getTime(),"yyyy-MM-dd"));
         query.setCheckDate2(DateUtil.timeStampToDate(DateUtil.addDate(new Date(),1).getTime(),"yyyy-MM-dd"));
-        //query.setCheckDate1(DateUtil.timeStampToDate(DateUtil.addDate(new Date(),-2).getTime(),"yyyy-MM-dd"));
-        //query.setCheckDate2(DateUtil.timeStampToDate(DateUtil.addDate(new Date(),1).getTime(),"yyyy-MM-dd"));
         query.setInputOrganCode(QuartzJobListener.token.getInputOrganCode());//获取接口连接token
         req.setRemark("围产辅助检查");
         req.setOperate("queryPersonWcFzjc");
@@ -62,6 +60,7 @@ public class FybPushLabServiceImpl implements FybPushLabService {
      */
     @Override
     public boolean saveWcFzjc(PushPerson person) {
+        person.setSrc("无锡人民医院");
         boolean status = false;
         if (StringUtils.isEmpty(person.getOutpatientNo())){
             return false;
@@ -71,7 +70,7 @@ public class FybPushLabServiceImpl implements FybPushLabService {
             return false;
         }
         BaseRequest<ComPush<PushLabItem>> req = new BaseRequest<>();//创建请求对象
-        ComPush<PushLabItem> cl = new ComPush();
+        ComPush<PushLabItem> cl = new ComPush<PushLabItem>();
         List<PushLabItem> result = new ArrayList<>();
         infoList.forEach(info->{ //将检验结果转成待推的请求格式
             PushLabItem item = new PushLabItem();
@@ -91,6 +90,10 @@ public class FybPushLabServiceImpl implements FybPushLabService {
         BaseResponse res = JacksonUtil.json2Bean(resStr, new TypeReference<BaseResponse>() {});//获取响应
         //System.out.println(JacksonUtil.bean2Json(req));
         //System.out.println(resStr);
+        if (null == res){
+            log.info("门诊号"+person.getOutpatientNo()+",调用接口无响应");
+            return false;
+        }
         if ("success".equals(res.getResult()))
         {
             //如果发送成功,设置请求成功

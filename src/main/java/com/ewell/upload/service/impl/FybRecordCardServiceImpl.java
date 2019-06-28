@@ -18,6 +18,7 @@ import com.ewell.upload.webservice.FYClientPro.Mchis;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.sun.tools.rngom.parse.host.Base;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.remoting.soap.SoapFaultException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,7 +97,7 @@ public class FybRecordCardServiceImpl implements FybRecordCardService {
         }else{
             int i = fybOutTotalDao.updateErrorMessage(info.getData().getPatientId(),
                     info.getData().getOutpCheckNo(),
-                    "更新时出现了未知异常","2");
+                    "系统异常,"+info.getMessage(),"2");
         }
         if (status){
             //删除待建档病人列表
@@ -119,25 +120,39 @@ public class FybRecordCardServiceImpl implements FybRecordCardService {
             if (StringUtils.isNotEmpty(totalObject.getIdNo())) {
                 if (fybOutTotalDao.selectHealthNoByOutpNo(totalObject.getOutpCheckNo()) == null)//判断是否存在当前病人
                 {
-                    BaseRequest<GetHealthNo> req = new BaseRequest<>();//创建申请请求
-                    req.setData(new GetHealthNo(totalObject.getIdNo()));
-                    req.setSource("womanMain");
-                    req.setOperate("get");
-                    req.setRemark("孕妇建卡");
-                    //System.out.println("get建卡信息"+JacksonUtil.bean2Json(req));
-                    //调阅病人保健号
-                    //log.debug("send Fy womanMain----->"+JacksonUtil.bean2Json(req));
-                    String resStr = Mchis.getInstance().getMchisHttpSoap11Endpoint().getData(QuartzJobListener.token.getToken(), JacksonUtil.bean2Json(req));
-                    //log.debug("resp Fy womanMain----->"+resStr);
-                    BaseResponse<List<FybWomanMain>> res = JacksonUtil.json2Bean(resStr, new TypeReference<BaseResponse<List<FybWomanMain>>>() {
-                    });
-                    BaseResponse<FybOutInfo> infoBody = new BaseResponse<FybOutInfo>();
                     FybOutInfo info = new FybOutInfo();
                     info.setPatientId(totalObject.getPatientId());
                     info.setOutpCheckNo(totalObject.getOutpCheckNo());
                     info.setStatus(totalObject.getStatus());
                     info.setRegTime(totalObject.getRegTime());
                     info.setIdNo(totalObject.getIdNo());
+                    BaseResponse<FybOutInfo> infoBody = new BaseResponse<FybOutInfo>();
+                    BaseRequest<GetHealthNo> req = new BaseRequest<>();//创建申请请求
+                    req.setData(new GetHealthNo(totalObject.getIdNo()));
+                    req.setSource("womanMain");
+                    req.setOperate("get");
+                    req.setRemark("孕妇建卡");
+                    //调阅病人保健号
+                    log.info("孕妇建卡"+JacksonUtil.bean2Json(req));
+                    final String resStr;
+                    try {
+                        resStr = Mchis.getInstance().getMchisHttpSoap11Endpoint().getData(QuartzJobListener.token.getToken(), JacksonUtil.bean2Json(req));
+                    }catch (SoapFaultException e){
+                        infoBody.setData(info);
+                        infoBody.setResult(UploadConstant.OTHER);
+                        infoBody.setMessage("调阅建卡时,运行时异常:"+StringUtils.getSubStr(e.getMessage(),StringUtils.L500));
+                        outInfoList.add(infoBody);
+                        return;
+                    }
+                    BaseResponse<List<FybWomanMain>> res = JacksonUtil.json2Bean(resStr, new TypeReference<BaseResponse<List<FybWomanMain>>>() {
+                    });
+                    if (null == res){
+                        infoBody.setData(info);
+                        infoBody.setResult(UploadConstant.FAIL);
+                        infoBody.setMessage("调阅建档信息失败");
+                        outInfoList.add(infoBody);
+                        return;
+                    }
                     //如果调阅成功
                     if ("success".equals(res.getResult())) {
                         //System.out.println(JacksonUtil.bean2Json(resStr));
@@ -150,6 +165,7 @@ public class FybRecordCardServiceImpl implements FybRecordCardService {
                             return;
                         }
                         //FybWomanCheck check = testImpl.test(totalObject.getOutpCheckNo());
+                        check.setSrc("无锡人民医院");
                         check.setOrganCode(QuartzJobListener.token.getInputOrganCode());
                         check.setOrgan(QuartzJobListener.token.getInputOrganName());
                         check.setInputOrgan(QuartzJobListener.token.getInputOrganName());
@@ -161,8 +177,6 @@ public class FybRecordCardServiceImpl implements FybRecordCardService {
                         check.setCardType("01");
                         check.setCardNo(totalObject.getIdNo());
                         check.setHealthNo(res.getData().get(0).getHealthNo());
-                        //check.setGestDays("1");
-                        //check.setSureDays("1");
                         BaseRequest<FybWomanCheck> reqCheck = new BaseRequest<>();
                         reqCheck.setData(check);
                         reqCheck.setRemark("孕妇产检");
@@ -172,11 +186,26 @@ public class FybRecordCardServiceImpl implements FybRecordCardService {
                         info.setHealthcareNo(res.getData().get(0).getHealthNo());
                         infoBody.setData(info);
                         //推送产前检查信息
-                        log.debug("send Fy womanCheck----->"+JacksonUtil.bean2Json(reqCheck));
-                        String resStrCheck = Mchis.getInstance().getMchisHttpSoap11Endpoint().saveData(QuartzJobListener.token.getToken(), JacksonUtil.bean2Json(reqCheck));
-                        log.debug("resp Fy womanCheck----->"+resStr);
+                        final String resStrCheck;
+                        try {
+                            resStrCheck = Mchis.getInstance().getMchisHttpSoap11Endpoint().
+                                    saveData(QuartzJobListener.token.getToken(), JacksonUtil.bean2Json(reqCheck));
+                        }catch (SoapFaultException e){
+                            infoBody.setData(info);
+                            infoBody.setResult(UploadConstant.OTHER);
+                            infoBody.setMessage("推送产前信息时,运行时异常:"+StringUtils.getSubStr(e.getMessage(),StringUtils.L500));
+                            outInfoList.add(infoBody);
+                            return;
+                        }
                         BaseResponse resCheck = JacksonUtil.json2Bean(resStrCheck, new TypeReference<BaseResponse>() {
                         });
+                        if (null == resCheck){
+                            infoBody.setData(info);
+                            infoBody.setResult(UploadConstant.FAIL);
+                            infoBody.setMessage("推送产前信息失败");
+                            outInfoList.add(infoBody);
+                            return;
+                        }
                         if ("success".equals(resCheck.getResult())) {
                             infoBody.setResult(res.getResult());
                             infoBody.setMessage(res.getMessage());

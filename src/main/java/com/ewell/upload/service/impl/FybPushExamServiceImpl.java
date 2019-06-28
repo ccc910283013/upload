@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -62,6 +63,7 @@ public class FybPushExamServiceImpl implements FybPushExamService {
 
     @Override
     public boolean saveWcQtjc(PushPerson person) {
+        person.setSrc("无锡人民医院");
         boolean status = false;
         if (StringUtils.isEmpty(person.getOutpatientNo())){
             return false;
@@ -71,7 +73,7 @@ public class FybPushExamServiceImpl implements FybPushExamService {
             return false;
         }
         BaseRequest<ComPush<PushExamItem>> req = new BaseRequest<>();//创建请求对象
-        ComPush<PushExamItem> cl = new ComPush();
+        ComPush<PushExamItem> cl = new ComPush<PushExamItem>();
         List<PushExamItem> result = new ArrayList<>();
         infoList.forEach(info->{ //将检验结果转成待推的请求格式
             PushExamItem item = new PushExamItem();
@@ -87,10 +89,15 @@ public class FybPushExamServiceImpl implements FybPushExamService {
         req.setRemark("围产其他检查");
         //System.out.println(JacksonUtil.bean2Json(req));
         String resStr = Mchis.getInstance().getMchisHttpSoap11Endpoint().//推送病人检验结果
-                saveData(QuartzJobListener.token.getToken(),JacksonUtil.bean2Json(req));
-        BaseResponse res = JacksonUtil.json2Bean(resStr, new TypeReference<BaseResponse>() {});//获取响应
+                    saveData(QuartzJobListener.token.getToken(), JacksonUtil.bean2Json(req));
+        BaseResponse res = JacksonUtil.json2Bean(resStr, new TypeReference<BaseResponse>() {
+            });//获取响应
         //System.out.println(JacksonUtil.bean2Json(req));
         //System.out.println(resStr);
+        if (null == res){
+            log.info("门诊号"+person.getOutpatientNo()+",调用接口无响应");
+            return false;
+        }
         if ("success".equals(res.getResult()))
         {
             //如果发送成功,设置请求成功

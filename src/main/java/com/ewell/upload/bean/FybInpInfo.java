@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class FybInpInfo {
+
     private String inpNo;
     private String saveTime;
     private String healthcareNo;

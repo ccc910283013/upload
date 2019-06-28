@@ -14,7 +14,7 @@ public class PushExamTask {
     private FybPushExamService examService;
     public void taskMonitorEvent(PushPerson person) throws Exception{
         Boolean flag = examService.saveWcQtjc(person);
-        if (log.isTraceEnabled()){
+        if (log.isInfoEnabled()){
             log.info(Thread.currentThread()+"执行上传检查"+(flag?"成功":"失败")+"病人门诊号:"+person.getOutpatientNo());
         }
     }

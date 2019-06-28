@@ -8,6 +8,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class PushPerson {
+    private String src;
     private String organCode;
     private String organ;
     private String refType;

@@ -7,6 +7,7 @@ import com.ewell.upload.dto.BaseResponse;
 import com.ewell.upload.dto.data.ChildMain;
 import com.ewell.upload.dto.data.GetHealthNo;
 import com.ewell.upload.dto.data.WomanDelivery;
+import com.ewell.upload.dto.data.WomanMain;
 import com.ewell.upload.dto.data.pull.PullSysId;
 import com.ewell.upload.quartz.util.QuartzJobListener;
 import com.ewell.upload.service.FybInpService;
@@ -14,9 +15,10 @@ import com.ewell.upload.util.DateUtil;
 import com.ewell.upload.util.JacksonUtil;
 import com.ewell.upload.util.StringUtils;
 import com.ewell.upload.util.UploadConstant;
-import com.ewell.upload.webservice.client.Mchis;
+import com.ewell.upload.webservice.FYClientPro.Mchis;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.remoting.soap.SoapFaultException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,7 +79,17 @@ public class FybInpServiceImpl implements FybInpService {
                         req.setOperate("get");
                         req.setRemark("孕妇建卡");
                         //调阅病人保健号
-                        String resStr = Mchis.getInstance().getMchisHttpSoap11Endpoint().getData(QuartzJobListener.token.getToken(), JacksonUtil.bean2Json(req));
+                        String resStr;
+                        try {
+                            resStr = Mchis.getInstance().getMchisHttpSoap11Endpoint().
+                                    getData(QuartzJobListener.token.getToken(), JacksonUtil.bean2Json(req));
+                        }catch (SoapFaultException e){
+                            resBase.setResult(UploadConstant.OTHER);
+                            resBase.setData(fybInpInfo);
+                            resBase.setMessage("调阅建卡时,运行时异常:"+StringUtils.getSubStr(e.getMessage(),StringUtils.L500));
+                            fybInpInfoList.add(resBase);
+                            return;
+                        }
                         BaseResponse<List<FybWomanMain>> res = JacksonUtil.json2Bean(resStr, new TypeReference<BaseResponse<List<FybWomanMain>>>() {});
                         if (null == res) {
                             resBase.setResult(UploadConstant.FAIL);
@@ -125,26 +137,38 @@ public class FybInpServiceImpl implements FybInpService {
                         reqWomanDelivery.setSource("womanDelivery");
                         reqWomanDelivery.setOperate("save");
                         reqWomanDelivery.setRemark("孕妇分娩");
+                        log.info("孕妇分娩入参:"+JacksonUtil.bean2Json(reqWomanDelivery));
                         //推送孕妇分娩信息
-                        String resWomanDelivery = Mchis.getInstance().getMchisHttpSoap11Endpoint().
-                                saveData(QuartzJobListener.token.getToken(),JacksonUtil.bean2Json(reqWomanDelivery));
+                        String resWomanDelivery ;
+                        try {
+                            resWomanDelivery = Mchis.getInstance().getMchisHttpSoap11Endpoint().
+                                    saveData(QuartzJobListener.token.getToken(),JacksonUtil.bean2Json(reqWomanDelivery));
+                        }catch (SoapFaultException e){
+                            resBase.setResult(UploadConstant.OTHER);
+                            resBase.setData(fybInpInfo);
+                            resBase.setMessage("推送孕妇分娩信息时,运行时异常:"+StringUtils.getSubStr(e.getMessage(),StringUtils.L500));
+                            fybInpInfoList.add(resBase);
+                            return;
+                        }
                         BaseResponse<PullSysId> resPullSysId = JacksonUtil.json2Bean(resWomanDelivery, new TypeReference<BaseResponse<PullSysId>>() {});
                         if (null == resPullSysId){
                             resBase.setResult(UploadConstant.FAIL);
-                            resBase.setMessage("推送分娩信息失败");
+                            resBase.setMessage("推送分娩信息失败,服务无响应");
                             resBase.setData(fybInpInfo);
                             fybInpInfoList.add(resBase); //如果推送分娩信息失败，则直接跳过当前数据
                             return;
                         }
                         if ("success".equals(resPullSysId.getResult())){
+                            fybInpInfo.setSysId(resPullSysId.getData().getSysId());
                             StringBuffer sb = new StringBuffer();
                             resBase.setData(fybInpInfo);
                             List<FybNewBorn> fybNewBorns = fybInpTotalDao.selectAllNewBorn(fybInpTotal.getInpNo());
                             fybNewBorns.forEach(fybNewBorn -> {
                                 ChildMain childMain = new ChildMain(fybNewBorn);
+                                childMain.setBaby("1");
+                                childMain.setDbKey("0");
+                                childMain.setTbKey("0");
                                 childMain.setSrc("无锡人民医院");
-                                childMain.setOrganCode(QuartzJobListener.token.getInputOrganCode());
-                                childMain.setOrgan(QuartzJobListener.token.getInputOrganName());
                                 childMain.setInputOrgan(QuartzJobListener.token.getInputOrganName());
                                 childMain.setInputOrganCode(QuartzJobListener.token.getInputOrganCode());
                                 childMain.setInputDoctorCode(QuartzJobListener.token.getUserIdcard());
@@ -153,8 +177,6 @@ public class FybInpServiceImpl implements FybInpService {
                                 childMain.setIdcard(fybInpTotal.getIdNo());
                                 childMain.setCardType("01");
                                 childMain.setCardNo(fybInpTotal.getIdNo());
-                                childMain.setDoctor(QuartzJobListener.token.getUserName());
-                                childMain.setDoctorCode(QuartzJobListener.token.getUserIdcard());
                                 childMain.setHealthNo(fybInpInfo.getHealthcareNo()+fybNewBorn.getBabyNo());
                                 childMain.setMumHealthNo(fybInpInfo.getHealthcareNo());
                                 childMain.setSysId(fybInpInfo.getSysId());//系统唯一号,第一次为空,第二次有值
@@ -163,19 +185,41 @@ public class FybInpServiceImpl implements FybInpService {
                                 reqChildMain.setOperate("saveXse");
                                 reqChildMain.setSource("childMain");
                                 reqChildMain.setRemark("新生儿");
-                                String resChildMain = Mchis.getInstance().getMchisHttpSoap11Endpoint().
-                                        saveData(QuartzJobListener.token.getToken(),JacksonUtil.bean2Json(reqChildMain));
-                                BaseResponse<PullSysId> resPullSysIdSub = JacksonUtil.json2Bean(resChildMain, new TypeReference<BaseResponse<PullSysId>>() {});
-                                if (null == resPullSysIdSub){
-                                    sb.append("病人新生儿推送失败,保健号:");
-                                    sb.append(childMain.getHealthNo());
-                                    sb.append(";");
+                                //log.info(JacksonUtil.bean2Json(reqChildMain));
+                                String resChildMain;
+                                try {
+                                    resChildMain = Mchis.getInstance().getMchisHttpSoap11Endpoint().
+                                            saveData(QuartzJobListener.token.getToken(), JacksonUtil.bean2Json(reqChildMain));
+                                }catch (SoapFaultException e){
+                                    resBase.setResult(UploadConstant.OTHER);
+                                    resBase.setData(fybInpInfo);
+                                    resBase.setMessage("推送新生儿信息时,运行时异常:"+StringUtils.getSubStr(e.getMessage(),StringUtils.L500));
+                                    fybInpInfoList.add(resBase);
                                     return;
                                 }
-                                if ("fail".equals(resPullSysIdSub.getResult())){
-                                    sb.append("病人新生儿推送失败,保健号:");
+                                BaseResponse<WomanMain> resWomanMain= JacksonUtil.json2Bean(resChildMain, new TypeReference<BaseResponse<WomanMain>>() {});
+                                if (null == resWomanMain){
+                                    sb.append("病人新生儿推送失败,服务无响应,保健号:");
                                     sb.append(childMain.getHealthNo());
                                     sb.append(";");
+                                    resBase.setResult(UploadConstant.FAIL);
+                                    resBase.setMessage(sb.toString());
+                                    resBase.setData(fybInpInfo);
+                                    fybInpInfoList.add(resBase);
+                                    return;
+                                }
+                                if ("fail".equals(resWomanMain.getResult())){
+                                    sb.append("病人新生儿推送失败,保健号:");
+                                    sb.append(childMain.getHealthNo());
+                                    sb.append(",error:");
+                                    sb.append(resWomanMain.getMessage());
+                                    sb.append(";");
+                                }else if("error".equals(resWomanMain.getResult())){
+                                    sb.append("病人新生儿推送失败,保健号:");
+                                    sb.append(childMain.getHealthNo());
+                                    sb.append(",error:内部异常，见日志文件");
+                                    sb.append(";");
+                                    log.error(resWomanMain.getMessage());
                                 }
                             });
                             if (StringUtils.isEmpty(sb.toString())){
@@ -191,7 +235,7 @@ public class FybInpServiceImpl implements FybInpService {
                             }
                         }else {
                             resBase.setResult(UploadConstant.FAIL);
-                            resBase.setMessage("推送分娩信息失败");
+                            resBase.setMessage("推送分娩信息失败,error"+resPullSysId.getMessage());
                             resBase.setData(fybInpInfo);
                             fybInpInfoList.add(resBase); //如果推送分娩信息失败，则直接跳过当前数据
                         }

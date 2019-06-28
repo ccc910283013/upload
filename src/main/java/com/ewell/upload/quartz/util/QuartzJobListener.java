@@ -3,15 +3,13 @@ package com.ewell.upload.quartz.util;
 import com.ewell.upload.dto.BaseResponse;
 import com.ewell.upload.dto.data.LoginToken;
 import com.ewell.upload.util.JacksonUtil;
-import com.ewell.upload.webservice.client.Mchis;
+import com.ewell.upload.webservice.FYClientPro.Mchis;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobListener;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 @Slf4j
 @Component
@@ -59,6 +57,6 @@ public class QuartzJobListener implements JobListener {
      */
     @Override
     public void jobWasExecuted(JobExecutionContext jobExecutionContext, JobExecutionException e) {
-        System.out.println("被执行之后调用这个方法");
+        //System.out.println("被执行之后调用这个方法");
     }
 }

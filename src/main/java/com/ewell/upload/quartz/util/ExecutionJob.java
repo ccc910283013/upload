@@ -11,6 +11,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -27,10 +28,18 @@ public class ExecutionJob extends QuartzJobBean{
         String methodName = (String)jobExecutionContext.getMergedJobDataMap().get("beanMethod");//获取任务方法名称
         Object params = jobExecutionContext.getMergedJobDataMap().get("params");//获取任务参数
         try{
-            if ("pushJob".equals(beanName)){
-                BaseResponse<List<PushPerson>> resObject = labService.queryPersonWcFzjc();
+            if ("pushReportTask".equals(beanName)){
+                //BaseResponse<List<PushPerson>> resObject = labService.queryPersonWcFzjc();
+                BaseResponse<List<PushPerson>> resObject = new BaseResponse<>();
+                resObject.setResult("success");
+                resObject.setMessage("成功");
+                PushPerson pushPerson = new PushPerson();
+                List<PushPerson> pushPersonList = new ArrayList<>();
+                pushPerson.setSrc("无锡人民医院");
+                pushPerson.setOutpatientNo("123456");
+                pushPersonList.add(pushPerson);
+                resObject.setData(pushPersonList);
                 if ("success".equals(resObject.getResult())){
-                    //List<List<PushPerson>> personListasList = ListUtil.averageAssign(resObject.getData(),5);
                     resObject.getData().forEach(person->{
                         try {
                             QuartzRunnable runnable = new QuartzRunnable("pushLabTask", "taskMonitorEvent", person);
